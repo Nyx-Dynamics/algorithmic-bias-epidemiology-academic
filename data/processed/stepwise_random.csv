@@ -1,0 +1,13 @@
+step,barriers_removed,barrier_key,barrier_name,success_probability,cumulative_cost
+0,0,baseline,Baseline (all barriers),1.80093375e-05,0.0
+1,1,legal_knowledge,Legal Knowledge Gap,5.512988250000002e-05,1640.0
+2,2,multi_system_integration,Multi-System Integration,0.00013205115,2290.0
+3,3,permanent_storage,Permanent Storage,0.00034391362500000005,3560.0
+4,4,legal_resources,Legal Resource Barriers,0.0008026725000000002,4920.0
+5,5,record_access,Record Access Barriers,0.001983825,5600.0
+6,6,rapid_transmission,Rapid Data Transmission,0.006090750000000001,7110.0
+7,7,incomplete_propagation,Incomplete Correction Propagation,0.017816250000000002,8430.0
+8,8,systemic_bias,Systemic Bias in Algorithms,0.047,11090.0
+9,9,awareness_gap,Awareness Gap,0.134,14610.0
+10,10,correction_process,Correction Process Barriers,0.395,19970.0
+11,11,error_detection,Error Detection Difficulty,1.0,21900.0

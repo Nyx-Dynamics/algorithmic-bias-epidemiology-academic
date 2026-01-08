@@ -1,0 +1,8 @@
+type,term,effect,effect_pct
+individual,data_integration,0.00022454066250000002,0.02245406625
+individual,data_accuracy,0.00034952816250000016,0.03495281625000002
+individual,institutional,0.003620240662500001,0.3620240662500001
+pairwise,data_integration x data_accuracy,0.0043579218375,0.43579218374999995
+pairwise,data_integration x institutional,0.0451372093375,4.51372093375
+pairwise,data_accuracy x institutional,0.07026222183750001,7.026222183750002
+three-way,data_integration x data_accuracy x institutional,0.8760303281625,87.60303281625
