@@ -46,13 +46,41 @@
 
 ---
 
+### Figure 6: sensitivity_analysis.png
+
+**Title:** Global Sensitivity Analysis and Model Validation
+
+**Caption:** Four-panel sensitivity analysis of the 11-barrier algorithmic discrimination model. **Panel A (OAT Sensitivity):** One-at-a-time normalized sensitivity indices showing uniform sensitivity across barriers, confirming no single barrier dominates model output. **Panel B (Sobol Indices):** Variance-based global sensitivity indices with first-order (S₁) and total-order (S_T) effects. First-order indices range 0.04-0.10, while total-order indices cluster around 0.11, indicating substantial interaction effects. The gap between S₁ and S_T quantifies each barrier's participation in higher-order interactions. **Panel C (Morris Screening):** Elementary effects analysis plotting mean absolute effect (μ*) against standard deviation (σ). Barriers cluster in the high-σ region, confirming non-linear effects and interactions. **Panel D (Bootstrap CIs):** Distribution of 1,000 bootstrap samples for baseline success probability with 95% confidence interval (0.0013%-0.0025%). The tight distribution confirms model stability and reproducibility.
+
+---
+
+### Figure 7: snr_robustness.png
+
+**Title:** Signal-to-Noise Ratio Analysis and Key Finding Robustness
+
+**Caption:** Four-panel robustness analysis under parameter uncertainty. **Panel A (SNR Curve):** Signal-to-noise ratio (dB) as a function of multiplicative noise injection (1%-30%). SNR remains positive (>0 dB) until ~25% noise, indicating model conclusions are robust to moderate parameter uncertainty. **Panel B (Three-Way Interaction):** Bootstrap distribution of three-way interaction dominance, showing mean of 99.6% with 100% of samples exceeding the 70% threshold. This confirms the central finding that barrier synergy explains >87% of total effect is robust under resampling. **Panel C (Individual Effects):** Bootstrap distribution of maximum individual barrier effect, confirming all samples show <1% individual effect, validating the finding that single-barrier interventions are ineffective. **Panel D (Barriers Required):** Distribution of barriers needed for 90% success, showing 100% of bootstrap samples require ≥10 barriers, confirming the comprehensiveness requirement is robust. All key findings demonstrate 100% robustness across 1,000 bootstrap iterations.
+
+---
+
 ## Methodological Notes
 
+### Model Parameters
 - **Baseline success probability:** 0.0018% (product of 11 barrier pass probabilities)
 - **Maximum success probability:** 100% (all barriers removed)
 - **Monte Carlo simulations:** n=1,000 permutations for Shapley value estimation
 - **Cost estimates:** Based on legal aid, credit repair, and advocacy service market rates
-- **Statistical software:** Python 3.10 with NumPy, SciPy, Matplotlib
+
+### Sensitivity Analysis Methods
+- **OAT Sensitivity:** One-at-a-time perturbation analysis with ±10% parameter variation
+- **Sobol Indices:** Variance-based global sensitivity analysis using Saltelli sampling (n=1,024 base samples)
+- **Morris Screening:** Elementary effects method with r=20 trajectories for interaction detection
+- **SNR Analysis:** Signal-to-noise ratio computed across noise levels 1%-30% with n=100 replications each
+- **Bootstrap Validation:** n=1,000 bootstrap samples with 95% percentile confidence intervals
+
+### Software Environment
+- **Python:** 3.10+
+- **Core packages:** NumPy, SciPy, Matplotlib, SALib (Sensitivity Analysis Library)
+- **Reproducibility:** Random seed fixed at 42 for all stochastic analyses
 
 ---
 
