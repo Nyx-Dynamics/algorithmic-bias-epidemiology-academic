@@ -2,11 +2,11 @@
 
 ## Article Title
 
-**Algorithmic Discrimination as Epidemiological Phenomenon: A Mathematical Framework Revealing Synergistic Barrier Dynamics and the Futility of Incremental Reform**
+**Algorithmic Bias Epidemiology: A Computational Framework for Modeling Algorithmic Discrimination as an Epidemiological Process**
 
 ## Short Title (Running Head)
 
-Algorithmic Discrimination as Epidemiological Phenomenon
+Algorithmic Bias Epidemiology
 
 ## Article Type
 

@@ -10,7 +10,7 @@
 
 Dear Editor,
 
-I am pleased to submit the manuscript entitled **"Algorithmic Discrimination as Epidemiological Phenomenon: A Mathematical Framework Revealing Synergistic Barrier Dynamics and the Futility of Incremental Reform"** for consideration as an Original Article in NEJM AI.
+I am pleased to submit the manuscript entitled **"Algorithmic Bias Epidemiology: A Computational Framework for Modeling Algorithmic Discrimination as an Epidemiological Process"** for consideration as an Original Article in NEJM AI.
 
 ## Summary
 
