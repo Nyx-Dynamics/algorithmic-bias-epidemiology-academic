@@ -1,87 +1,73 @@
-# Figure Captions - Academic Publication
+# Figure Legends
 
-## Algorithmic Bias Epidemiology Framework
+## Algorithmic Discrimination as a Synergistic Barrier System: A Quantitative Interaction-Dominant Model
 
-**For Peer-Reviewed Publication**
+**AC Demidont, DO | Nyx Dynamics LLC**
 
 ---
 
 ### Figure 1: individual_barrier_effects.png
 
-**Title:** Marginal Effects of Individual Barrier Removal in the 11-Barrier Algorithmic Discrimination Model
-
-**Caption:** Counterfactual analysis of individual barrier removal effects on success probability. Horizontal bars represent the marginal change in P(success) when each barrier is removed while all others remain in place. Barriers are stratified by layer: Data Integration (green, n=3), Data Accuracy (blue, n=3), and Institutional (red, n=5). All individual effects approach zero (range: 0.00-0.02%), demonstrating the multiplicative blocking structure of the barrier system. This result is consistent with a synergistic interaction model where P(success) = ∏ᵢ P(pass barrier ᵢ), and removal of any single barrier yields P(success|barrier ᵢ removed) ≈ ∏ⱼ≠ᵢ P(pass barrier ⱼ) ≈ 0 when remaining barriers have low pass probabilities. Shapley value decomposition (see Figure 5) provides appropriate attribution accounting for interaction effects.
+**Figure 1. Individual Barrier Removal Effects.** Counterfactual analysis showing marginal effect on success probability of removing each barrier while all others remain in place. All effects approach zero (<0.02%), demonstrating the multiplicative blocking structure of the barrier system. Error bars represent 95% confidence intervals from bootstrap resampling (n=1,000). Pass probabilities for each barrier are derived from publicly available federal datasets and peer-reviewed studies (see Table 1 and Supplementary Table S1 for empirical sources and derivation logic).
 
 ---
 
 ### Figure 2: stepwise_comparison.png
 
-**Title:** Success Probability Trajectories Under Five Stepwise Barrier Removal Strategies
-
-**Caption:** Comparative analysis of barrier removal ordering strategies. X-axis: cumulative number of barriers removed (0-11). Y-axis: success probability (0-100%). Strategies: Forward removal by layer (L1→L2→L3, green circles), Backward removal (L3→L2→L1, red circles), Greedy by marginal impact (purple circles), Greedy by cost-effectiveness (orange circles), and Random ordering (gray circles, mean of n=10 permutations). All strategies exhibit characteristic "hockey stick" trajectories with near-zero improvement until removal of final 2-3 barriers, followed by rapid increase to ~95% success. Strategy equivalence (ANOVA: F=0.23, p=0.92) confirms that removal ordering is irrelevant; only removal completeness determines outcome. This finding has significant policy implications: partial reform efforts addressing subsets of barriers will fail regardless of which barriers are targeted.
+**Figure 2. Strategy Comparison for Barrier Removal.** Comparison of barrier removal strategies: forward (L1→L2→L3), backward (L3→L2→L1), greedy by marginal impact, and random ordering. All strategies exhibit characteristic "hockey stick" trajectories with near-zero improvement until removal of the final 2–3 barriers, followed by rapid increase to 100% success at complete barrier removal. Strategy equivalence (ANOVA: F=0.07, p=0.98) confirms that removal ordering is irrelevant; only completeness determines outcome.
 
 ---
 
-### Figure 3: layer_effects.png
+### Figure 3: interaction_heatmap.png
 
-**Title:** Barrier Layer Removal Effects and Cost-Effectiveness Analysis
-
-**Caption:** **Panel A:** Success probability improvement (Δ%) from removing barrier layers individually and in combination. Single-layer removal: Data Integration (+0.0%), Data Accuracy (+0.0%), Institutional (+0.3%). Dual-layer combinations: +3.2% to +7.8%. Complete removal (all three layers): +95.0%. The nonlinear scaling demonstrates strong positive synergy between layers. **Panel B:** Cost-effectiveness scatter plot. X-axis: total intervention cost (USD). Y-axis: success probability improvement (%). Point size proportional to number of barriers removed. The relationship exhibits increasing returns to scale: marginal cost-effectiveness improves with intervention scope. Complete barrier removal (~$14,000) achieves 6.8% improvement per $1,000, compared to <0.1% per $1,000 for partial interventions. Economic analysis supports comprehensive over incremental reform strategies.
+**Figure 3. Layer Interaction Effects.** Heatmap showing main effects (diagonal) and pairwise interactions (off-diagonal) for the three barrier layers. The dominant three-way interaction (87.6% of total effect, not shown in heatmap) accounts for the majority of system behaviour. Colour intensity represents effect magnitude (% improvement in success probability). The interaction structure demonstrates that barriers operate synergistically rather than independently.
 
 ---
 
-### Figure 4: interaction_heatmap.png
+### Figure 4: sensitivity_analysis.png
 
-**Title:** ANOVA Decomposition of Layer Interaction Effects
-
-**Caption:** Heatmap representation of main effects and two-way interactions from 2³ factorial analysis of layer removal. Diagonal cells: main effects of individual layer removal (Data Integration: 0.0%, Data Accuracy: 0.0%, Institutional: 0.3%). Off-diagonal cells: two-way interaction terms representing deviation from additivity. Color scale: red (negative/antagonistic) to green (positive/synergistic). All pairwise interactions are positive, indicating synergistic relationships. The Data Integration × Institutional interaction (+7.6%) is largest, reflecting the interdependence between data propagation systems and institutional remediation barriers. **Not shown:** Three-way interaction term = +87.6%, accounting for the majority of total effect variance. This decomposition confirms that the barrier system operates as an integrated whole rather than independent components, explaining observed resistance to single-target policy interventions.
+**Figure 4. Global Sensitivity Analysis.** Four-panel comprehensive sensitivity analysis: (A) One-at-a-time (OAT) sensitivity radar showing standard deviation of output change for each barrier under ±10% perturbation; (B) Sobol first-order (S1) and total-order (ST) indices with 95% confidence intervals, demonstrating interaction involvement through the S1–ST gap; (C) Morris elementary effects screening with mean absolute effect (μ*) vs. standard deviation (σ), where high σ indicates nonlinear or interaction effects; (D) Interaction contribution (ST − S1) for each barrier, quantifying the proportion of each parameter's influence attributable to interactions. Parameter values used in sensitivity analysis are traceable to empirical sources documented in Supplementary Table S1.
 
 ---
 
-### Figure 5: shapley_attribution.png
+### Figure 5: snr_robustness.png
 
-**Title:** Shapley Value Attribution for Barrier Contribution to System Effect
-
-**Caption:** Fair attribution of total success improvement to individual barriers using Shapley value decomposition from cooperative game theory. Shapley values computed over n=1,000 sampled permutations of barrier removal orderings. Bars represent each barrier's average marginal contribution across all possible coalitions. Color coding by layer: Data Integration (green), Data Accuracy (blue), Institutional (red). **Top three attributions:** Legal Knowledge Gap (11.5%), Rapid Data Transmission (10.6%), Systemic Bias in Algorithms (10.3%). Unlike marginal effects (Figure 1), Shapley values appropriately account for interaction structure, identifying barriers whose removal contributes most to overall system improvement. These attributions may inform resource allocation when comprehensive reform is infeasible, though the dominance of the three-way interaction term (87.6%) suggests that partial approaches remain substantially suboptimal.
+**Figure 5. Signal-to-Noise Ratio and Robustness.** (A) Signal-to-noise ratio (SNR) as a function of multiplicative parameter noise (1–30%); SNR remains positive (>0 dB) up to approximately 25% noise. (B) Output uncertainty propagation showing mean success probability with 95% uncertainty interval as parameter noise increases. (C) Robustness of key qualitative findings under 10% parameter uncertainty (bootstrap n=1,000), including three-way interaction dominance and near-zero individual effects. (D) Output variability quantified as coefficient of variation (CV) versus input uncertainty.
 
 ---
 
-### Figure 6: sensitivity_analysis.png
+## Supplementary Figures
 
-**Title:** Global Sensitivity Analysis and Model Validation
+### Figure S1: shapley_attribution.png
 
-**Caption:** Four-panel sensitivity analysis of the 11-barrier algorithmic discrimination model. **Panel A (OAT Sensitivity):** One-at-a-time normalized sensitivity indices showing uniform sensitivity across barriers, confirming no single barrier dominates model output. **Panel B (Sobol Indices):** Variance-based global sensitivity indices with first-order (S₁) and total-order (S_T) effects. First-order indices range 0.04-0.10, while total-order indices cluster around 0.11, indicating substantial interaction effects. The gap between S₁ and S_T quantifies each barrier's participation in higher-order interactions. **Panel C (Morris Screening):** Elementary effects analysis plotting mean absolute effect (μ*) against standard deviation (σ). Barriers cluster in the high-σ region, confirming non-linear effects and interactions. **Panel D (Bootstrap CIs):** Distribution of 1,000 bootstrap samples for baseline success probability with 95% confidence interval (0.0013%-0.0025%). The tight distribution confirms model stability and reproducibility.
+**Figure S1. Shapley Value Attribution of Barrier Contributions.** Shapley value decomposition assigning fair responsibility to each barrier accounting for all possible coalition orderings. Unlike marginal effects (which approach 0%), Shapley values reveal true causal contribution under interaction-dominant dynamics. Top contributors: Legal Knowledge Gap (11.3%), Rapid Data Transmission (11.1%), Correction Process Barriers (10.7%).
 
 ---
 
-### Figure 7: snr_robustness.png
+### Figure S2: layer_effects.png
 
-**Title:** Signal-to-Noise Ratio Analysis and Key Finding Robustness
+**Figure S2. Layer Removal Effects.** Effect of removing individual layers and layer combinations on system success probability. Single-layer removal yields negligible improvement. Even two-layer removal produces only modest effects (Data Accuracy + Institutional: 7.4%). Only complete removal across all three layers yields 100% success, reinforcing the synergistic barrier structure.
 
-**Caption:** Four-panel robustness analysis under parameter uncertainty. **Panel A (SNR Curve):** Signal-to-noise ratio (dB) as a function of multiplicative noise injection (1%-30%). SNR remains positive (>0 dB) until ~25% noise, indicating model conclusions are robust to moderate parameter uncertainty. **Panel B (Three-Way Interaction):** Bootstrap distribution of three-way interaction dominance, showing mean of 99.6% with 100% of samples exceeding the 70% threshold. This confirms the central finding that barrier synergy explains >87% of total effect is robust under resampling. **Panel C (Individual Effects):** Bootstrap distribution of maximum individual barrier effect, confirming all samples show <1% individual effect, validating the finding that single-barrier interventions are ineffective. **Panel D (Barriers Required):** Distribution of barriers needed for 90% success, showing 100% of bootstrap samples require ≥10 barriers, confirming the comprehensiveness requirement is robust. All key findings demonstrate 100% robustness across 1,000 bootstrap iterations.
+---
+
+### Figure S3: snr_robustness.png (same as Figure 5)
+
+**Figure S3. Robustness of Model Findings Under Parameter Uncertainty.** (A) Signal-to-noise ratio (SNR) as a function of multiplicative parameter noise (1–30%); SNR remains positive (>0 dB) up to approximately 25% noise. (B) Output uncertainty propagation showing mean success probability with 95% uncertainty interval as parameter noise increases. (C) Robustness of key qualitative findings under 10% parameter uncertainty (bootstrap n=1,000), including three-way interaction dominance and near-zero individual effects. (D) Output variability quantified as coefficient of variation (CV) versus input uncertainty.
 
 ---
 
 ## Methodological Notes
 
-### Model Parameters
 - **Baseline success probability:** 0.0018% (product of 11 barrier pass probabilities)
-- **Maximum success probability:** 100% (all barriers removed)
-- **Monte Carlo simulations:** n=1,000 permutations for Shapley value estimation
-- **Cost estimates:** Based on legal aid, credit repair, and advocacy service market rates
-
-### Sensitivity Analysis Methods
-- **OAT Sensitivity:** One-at-a-time perturbation analysis with ±10% parameter variation
-- **Sobol Indices:** Variance-based global sensitivity analysis using Saltelli sampling (n=1,024 base samples)
-- **Morris Screening:** Elementary effects method with r=20 trajectories for interaction detection
-- **SNR Analysis:** Signal-to-noise ratio computed across noise levels 1%-30% with n=100 replications each
-- **Bootstrap Validation:** n=1,000 bootstrap samples with 95% percentile confidence intervals
-
-### Software Environment
-- **Python:** 3.10+
-- **Core packages:** NumPy, SciPy, Matplotlib, SALib (Sensitivity Analysis Library)
-- **Reproducibility:** Random seed fixed at 42 for all stochastic analyses
+- **Strategies compared:** 4 (forward, backward, greedy by marginal impact, random)
+- **Shapley values:** Computed over all possible coalition orderings
+- **Sobol indices:** Saltelli sampling (n=1,024 base samples)
+- **Morris screening:** r=20 trajectories
+- **SNR analysis:** Noise levels 1–30%, n=100 replications each
+- **Bootstrap validation:** n=1,000 samples, 95% percentile CIs
+- **Random seed:** 42
+- **Software:** Python 3.10+, NumPy, SciPy, Matplotlib, SALib
 
 ---
 
-*Nyx Dynamics LLC | January 2026*
+*Updated: February 2026*

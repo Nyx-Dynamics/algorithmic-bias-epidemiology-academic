@@ -1,12 +1,12 @@
 barrier_key,barrier_name,layer,shapley_value,shapley_pct,attribution_pct
-rapid_transmission,Rapid Data Transmission,data_integration,0.11371689187363744,11.371689187363744,11.371893987640581
-awareness_gap,Awareness Gap,institutional,0.10924125275050306,10.924125275050306,10.924322014852429
-legal_knowledge,Legal Knowledge Gap,institutional,0.1069797000897845,10.69797000897845,10.698162675800708
-correction_process,Correction Process Barriers,data_accuracy,0.1030975390761875,10.30975390761875,10.3099395828003
-systemic_bias,Systemic Bias in Algorithms,institutional,0.10282797297836867,10.282797297836867,10.282982487538991
-error_detection,Error Detection Difficulty,data_accuracy,0.0923769441794469,9.23769441794469,9.237860785697357
-legal_resources,Legal Resource Barriers,institutional,0.08440882086215641,8.440882086215641,8.441034103647663
-incomplete_propagation,Incomplete Correction Propagation,data_accuracy,0.08141776446872831,8.14177644687283,8.141923077513432
-permanent_storage,Permanent Storage,data_integration,0.07375047162896865,7.375047162896865,7.375179985002338
-record_access,Record Access Barriers,institutional,0.06774934064189045,6.774934064189045,6.775056078460542
-multi_system_integration,Multi-System Integration,data_integration,0.06441529211282801,6.441529211282801,6.441645221045642
+legal_knowledge,Legal Knowledge Gap,institutional,0.11143405023150933,11.143405023150933,11.143605712107169
+awareness_gap,Awareness Gap,institutional,0.10859216920260623,10.859216920260623,10.859412491085225
+systemic_bias,Systemic Bias in Algorithms,institutional,0.10714572131451565,10.714572131451565,10.714765097272434
+rapid_transmission,Rapid Data Transmission,data_integration,0.10337228001970632,10.337228001970631,10.33741417195133
+error_detection,Error Detection Difficulty,data_accuracy,0.1011335221488718,10.113352214887179,10.11353435294066
+incomplete_propagation,Incomplete Correction Propagation,data_accuracy,0.09241102416037517,9.241102416037517,9.241268845167077
+correction_process,Correction Process Barriers,data_accuracy,0.09111057158608432,9.111057158608432,9.111221245666883
+legal_resources,Legal Resource Barriers,institutional,0.0824022850147781,8.24022850147781,8.240376905206622
+permanent_storage,Permanent Storage,data_integration,0.07879980610572793,7.879980610572793,7.880122526358911
+multi_system_integration,Multi-System Integration,data_integration,0.06626553980745935,6.626553980745935,6.626673322742306
+record_access,Record Access Barriers,institutional,0.057315021070865634,5.7315021070865635,5.731605329501359

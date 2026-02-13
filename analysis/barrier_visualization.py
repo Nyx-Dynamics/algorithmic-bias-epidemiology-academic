@@ -6,7 +6,7 @@ Generates publication-quality figures and CSV exports for:
 1. Individual barrier removal effects
 2. Stepwise cumulative removal strategies
 3. Layer interaction heatmaps
-4. Cost-effectiveness analysis
+4. Shapley value attribution
 
 Author: AC Demidont, DO
 Nyx Dynamics LLC
@@ -200,7 +200,6 @@ class BarrierRemovalModel:
         - forward: Layer 1 → 2 → 3
         - backward: Layer 3 → 2 → 1
         - optimal: Greedy by impact
-        - cost_optimal: Greedy by cost-effectiveness
         - random: Random order (average of 10 runs)
         """
         strategies = {}
@@ -223,9 +222,6 @@ class BarrierRemovalModel:
 
         # Optimal: Greedy by impact
         strategies['optimal'] = self._greedy_removal_by_impact()
-
-        # Cost-optimal: Greedy by cost-effectiveness
-        strategies['cost_optimal'] = self._greedy_removal_by_cost()
 
         # Random: Average of multiple runs
         random_results = []
@@ -324,7 +320,12 @@ class BarrierRemovalModel:
         return pd.DataFrame(results)
 
     def _greedy_removal_by_cost(self) -> pd.DataFrame:
-        """Greedy removal by cost-effectiveness (impact per dollar)."""
+        """Greedy removal by cost-effectiveness (impact per dollar).
+
+        DEPRECATED: Removed from manuscript analysis. Cost-effectiveness
+        strategy requires well-defined cost models to be scientifically
+        supportable. Retained for archival purposes only.
+        """
         results = []
         removed = []
         remaining = list(self.barriers.keys())
@@ -597,18 +598,30 @@ def generate_visualizations(model: BarrierRemovalModel, output_dir: str = '.'):
         'forward': '#2ecc71',
         'backward': '#e74c3c',
         'optimal': '#9b59b6',
-        'cost_optimal': '#f39c12',
         'random': '#95a5a6',
+    }
+
+    label_map = {
+        'forward': 'Forward (L1→L2→L3)',
+        'backward': 'Backward (L3→L2→L1)',
+        'optimal': 'Greedy (Marginal Impact)',
+        'random': 'Random (Avg. 10 runs)',
     }
 
     for name, df in strategies.items():
         ax.plot(df['barriers_removed'], df['success_probability'] * 100,
-               'o-', label=name.replace('_', ' ').title(),
+               'o-', label=label_map.get(name, name),
                color=colors_strat[name], linewidth=2, markersize=6)
+
+    # Compute strategy equivalence ANOVA
+    from scipy import stats as sp_stats
+    strategy_probs = [df['success_probability'].values for df in strategies.values()]
+    f_stat, p_val = sp_stats.f_oneway(*strategy_probs)
 
     ax.set_xlabel('Number of Barriers Removed', fontsize=12)
     ax.set_ylabel('Success Probability (%)', fontsize=12)
-    ax.set_title('Stepwise Barrier Removal: Strategy Comparison\n(All strategies converge only at complete removal)',
+    ax.set_title(f'Stepwise Barrier Removal: Strategy Comparison\n'
+                 f'(ANOVA: F={f_stat:.2f}, p={p_val:.2f} — all strategies converge only at complete removal)',
                 fontsize=14, fontweight='bold')
     ax.legend()
     ax.set_xlim(-0.5, 11.5)
