@@ -147,8 +147,8 @@ python analysis/sensitivity_analysis.py
   year = {2026},
   publisher = {Zenodo},
   version = {v1.1.0},
-  doi = {PENDING},
-  url = {https://github.com/Nyx-Dynamics/algorithmic-bias-epidemiology-academic}
+  doi = {10.5281/zenodo.18746745},
+  url = {https://doi.org/10.5281/zenodo.18746745}
 }
 ```
 
