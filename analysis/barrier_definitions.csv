@@ -1,0 +1,12 @@
+key,name,layer,base_probability,removal_cost,description
+rapid_transmission,Rapid Data Transmission,data_integration,0.3,500,Data spreads to CRAs within days
+multi_system_integration,Multi-System Integration,data_integration,0.55,1000,Data copied across 20+ databases
+permanent_storage,Permanent Storage,data_integration,0.45,2000,No automatic expiration of records
+error_detection,Error Detection Difficulty,data_accuracy,0.35,300,Errors difficult to identify
+correction_process,Correction Process Barriers,data_accuracy,0.35,800,"Complex, slow correction procedures"
+incomplete_propagation,Incomplete Correction Propagation,data_accuracy,0.4,1500,Corrections not applied across systems
+awareness_gap,Awareness Gap,institutional,0.3,100,Individuals unaware of adverse data
+record_access,Record Access Barriers,institutional,0.55,200,Difficulty obtaining own records
+legal_knowledge,Legal Knowledge Gap,institutional,0.25,500,Not knowing legal rights/remedies
+legal_resources,Legal Resource Barriers,institutional,0.4,5000,Cost of legal representation
+systemic_bias,Systemic Bias in Algorithms,institutional,0.3,10000,Bias encoded in algorithm design

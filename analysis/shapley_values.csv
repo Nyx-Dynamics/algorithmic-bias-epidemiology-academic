@@ -1,0 +1,12 @@
+barrier_key,barrier_name,layer,shapley_value,shapley_pct,attribution_pct
+legal_knowledge,Legal Knowledge Gap,institutional,0.11331277405469994,11.331277405469994,11.331481477944305
+rapid_transmission,Rapid Data Transmission,data_integration,0.11070799101269692,11.070799101269692,11.070998482617826
+correction_process,Correction Process Barriers,data_accuracy,0.10708384207161878,10.708384207161878,10.708577061540323
+systemic_bias,Systemic Bias in Algorithms,institutional,0.10477041733040313,10.477041733040313,10.47723042101903
+awareness_gap,Awareness Gap,institutional,0.09984076341513747,9.984076341513747,9.984256151352461
+error_detection,Error Detection Difficulty,data_accuracy,0.09831801300254364,9.831801300254364,9.831978367671079
+legal_resources,Legal Resource Barriers,institutional,0.07920740145427523,7.920740145427523,7.92088279527908
+permanent_storage,Permanent Storage,data_integration,0.07502279136158105,7.502279136158105,7.502414249668392
+incomplete_propagation,Incomplete Correction Propagation,data_accuracy,0.07419662697645016,7.419662697645016,7.419796323261182
+multi_system_integration,Multi-System Integration,data_integration,0.06909415266237177,6.909415266237177,6.909539702469648
+record_access,Record Access Barriers,institutional,0.06842721732072174,6.842721732072174,6.842844967176648
