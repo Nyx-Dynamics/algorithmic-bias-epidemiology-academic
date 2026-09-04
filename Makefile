@@ -125,19 +125,23 @@ derivations: derivation
 # figures: regenerate ALL manuscript figures (barrier + sensitivity + copula) as
 # seeded PNGs into the canonical, tracked manuscript/figures dir so committed
 # figures are never stale. Use `make figures-tif` for submission-ready TIFFs.
-figures: | $(MSFIGDIR)
+# figures: regenerate ALL figures (barrier + sensitivity + copula) as seeded PNGs.
+# Scripts also emit CSVs, so we stage everything in build/figures and copy ONLY
+# the images into the tracked manuscript/figures dir (keeps it figures-only, never stale).
+figures: | $(FIGDIR) $(MSFIGDIR)
 	@test -f $(VIZ_SCRIPT) || { echo "ERROR: $(VIZ_SCRIPT) not found"; exit 1; }
 	@test -f $(COPULA_SCRIPT) || { echo "ERROR: $(COPULA_SCRIPT) not found"; exit 1; }
-	@echo ">> Regenerating ALL figures (seed=$(SEED)) -> $(MSFIGDIR) (png, $(FIG_DPI) dpi)"
-	@$(PY) $(VIZ_SCRIPT)  --seed $(SEED) --outdir $(MSFIGDIR) --fig-format png --dpi $(FIG_DPI)
-	@$(PY) $(SENS_SCRIPT) --seed $(SEED) --outdir $(MSFIGDIR) --fig-format png --dpi $(FIG_DPI) >/dev/null
-	@$(PY) $(COPULA_SCRIPT) --seed $(SEED) --rho-min $(RHO_MIN) --rho-max $(RHO_MAX) --rho-step $(RHO_STEP) --n $(COPULA_N) --outdir $(PROCESSED) --figdir $(MSFIGDIR) --fig-format png --dpi $(FIG_DPI) >/dev/null
-	@echo "   -> refreshed: individual_barrier_effects, stepwise_comparison, layer_effects, interaction_heatmap, shapley_attribution, sensitivity_analysis, snr_robustness, FigX_copula_robustness (.png)"
+	@echo ">> Regenerating ALL figures (seed=$(SEED)) -> staging in $(FIGDIR), copying images to $(MSFIGDIR)"
+	@$(PY) $(VIZ_SCRIPT)  --seed $(SEED) --outdir $(FIGDIR) --fig-format png --dpi $(FIG_DPI) >/dev/null
+	@$(PY) $(SENS_SCRIPT) --seed $(SEED) --outdir $(FIGDIR) --fig-format png --dpi $(FIG_DPI) >/dev/null
+	@$(PY) $(COPULA_SCRIPT) --seed $(SEED) --rho-min $(RHO_MIN) --rho-max $(RHO_MAX) --rho-step $(RHO_STEP) --n $(COPULA_N) --outdir $(PROCESSED) --figdir $(FIGDIR) --fig-format png --dpi $(FIG_DPI) >/dev/null
+	@cp -f $(FIGDIR)/*.png $(MSFIGDIR)/
+	@echo "   -> refreshed $(MSFIGDIR)/*.png (barrier, stepwise, layer, heatmap, shapley, sensitivity, snr, copula)"
 
-# figures-tif: submission-ready .tif at 300 dpi into build/figures (validate via PLOS NAAS)
+# figures-tif: submission-ready .tif at 300 dpi in build/figures (validate via PLOS NAAS)
 figures-tif: | $(FIGDIR)
 	@echo ">> Regenerating ALL figures as TIFF -> $(FIGDIR) (300 dpi)"
-	@$(PY) $(VIZ_SCRIPT)  --seed $(SEED) --outdir $(FIGDIR) --fig-format tiff --dpi 300
+	@$(PY) $(VIZ_SCRIPT)  --seed $(SEED) --outdir $(FIGDIR) --fig-format tiff --dpi 300 >/dev/null
 	@$(PY) $(SENS_SCRIPT) --seed $(SEED) --outdir $(FIGDIR) --fig-format tiff --dpi 300 >/dev/null
 	@$(PY) $(COPULA_SCRIPT) --seed $(SEED) --rho-min $(RHO_MIN) --rho-max $(RHO_MAX) --rho-step $(RHO_STEP) --n $(COPULA_N) --outdir $(PROCESSED) --figdir $(FIGDIR) --fig-format tiff --dpi 300 >/dev/null
 	@echo "   -> $(FIGDIR)/*.tiff (validate via PLOS NAAS before upload)"
