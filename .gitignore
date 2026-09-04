@@ -13,3 +13,9 @@ build/
 
 # Local revision drafts & internal notes (do not publish)
 revision/
+
+# Tool config and stray figure outputs (regenerable)
+.ai/
+data/processed/*.png
+data/processed/*.tif
+data/processed/*.tiff
