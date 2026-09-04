@@ -1,0 +1,21 @@
+{
+  "model_10_barrier_systemic_bias_removed": {
+    "base": 6.003112500000002e-05,
+    "max_barrier": 0.00018009337500000006,
+    "max_layer": 0.3578218875000001,
+    "three_way": 86.58618438750001
+  },
+  "model_11_barrier": {
+    "base": 1.8009337500000003e-05,
+    "max_barrier": 5.402801250000001e-05,
+    "max_layer": 0.3620240662500001,
+    "three_way": 87.60303281625
+  },
+  "qualitative_unchanged": {
+    "all_conclusions_unchanged": true,
+    "baseline_still_below_1pct": true,
+    "max_single_barrier_still_below_0.02pct": true,
+    "three_way_still_dominant_above_50pct": true
+  },
+  "seed": 42
+}

@@ -56,6 +56,12 @@
       "pass": true,
       "got": true,
       "expected": true
+    },
+    {
+      "check": "output_exists:data/processed/systemic_bias_sensitivity.json",
+      "pass": true,
+      "got": true,
+      "expected": true
     }
   ]
 }

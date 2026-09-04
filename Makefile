@@ -32,6 +32,7 @@ FIG_DPI      ?= 300
 VIZ_SCRIPT      := $(SCRIPTS)/barrier_visualization.py
 SENS_SCRIPT     := $(SCRIPTS)/sensitivity_analysis.py
 COPULA_SCRIPT   := $(SCRIPTS)/copula_robustness.py
+SYSBIAS_SCRIPT  := $(SCRIPTS)/systemic_bias_sensitivity.py
 DERIV_SCRIPT    := $(SCRIPTS)/build_derivation_table.py
 VERIFY_SCRIPT   := $(SCRIPTS)/verify_baseline.py
 MANIFEST_SCRIPT := $(SCRIPTS)/write_manifest.py
@@ -107,10 +108,17 @@ copula: check-copula-script | $(PROCESSED) $(FIGDIR)
 
 topology: copula
 
-systemic_bias_sensitivity: copula
-	@echo "NOTE: Systemic-bias reclassification metrics are in copula_sweep.csv (block variant)."
+# Minor 2: systemic-bias placement/reclassification sensitivity (10- vs 11-barrier).
+# Runs the REAL script (not the copula sweep) and emits a deterministic JSON.
+# systemic_bias_sensitivity.py imports barrier_visualization as a top-level
+# module, so we put SCRIPTS on PYTHONPATH.
+systemic_bias_sensitivity: | $(PROCESSED)
+	@test -f $(SYSBIAS_SCRIPT) || { echo "ERROR: $(SYSBIAS_SCRIPT) not found"; exit 1; }
+	@echo ">> Systemic-bias placement sensitivity (Minor 2, seed=$(SEED))"
+	@PYTHONPATH=$(SCRIPTS) $(PY) $(SYSBIAS_SCRIPT) --seed $(SEED) --outdir $(PROCESSED)
+	@echo "   -> $(PROCESSED)/systemic_bias_sensitivity.json"
 
-analysis: sensitivity copula
+analysis: sensitivity copula systemic_bias_sensitivity
 
 check-deriv-script:
 	@test -f $(DERIV_SCRIPT) || { echo "BLOCKER: $(DERIV_SCRIPT) missing"; exit 1; }
@@ -156,9 +164,9 @@ test:
 	@echo ">> Regression tests (deterministic anchors + determinism)"
 	@$(PY) -m pytest tests/test_regression.py -q
 
-verify: | $(REPRO)
+verify: systemic_bias_sensitivity | $(REPRO)
 	@echo ">> Claims-vs-code verification + output existence + manifest"
-	@$(PY) $(VERIFY_SCRIPT) --seed $(SEED) --json $(REPRO)/baseline_verification.json --check-outputs $(PROCESSED)/shapley_values.csv $(PROCESSED)/interaction_effects.csv $(PROCESSED)/individual_barrier_effects.csv
+	@$(PY) $(VERIFY_SCRIPT) --seed $(SEED) --json $(REPRO)/baseline_verification.json --check-outputs $(PROCESSED)/shapley_values.csv $(PROCESSED)/interaction_effects.csv $(PROCESSED)/individual_barrier_effects.csv $(PROCESSED)/systemic_bias_sensitivity.json
 	@echo ">> Determinism check: two seeded sensitivity runs must be identical"
 	@rm -rf $(BUILD)/_verify_a $(BUILD)/_verify_b
 	@mkdir -p $(BUILD)/_verify_a $(BUILD)/_verify_b
@@ -172,7 +180,7 @@ verify: | $(REPRO)
 	@$(PY) $(MANIFEST_SCRIPT) --seed $(SEED) --out $(REPRO)/run_manifest.json --versions-out $(REPRO)/software_versions.txt --targets verify --outputs $(PROCESSED)/shapley_values.csv $(PROCESSED)/copula_sweep.csv $(REPRO)/baseline_verification.json
 	@echo "   -> $(REPRO)/baseline_verification.json ; $(REPRO)/run_manifest.json"
 
-all: env baseline sensitivity copula derivation tables figures figures-tif test verify
+all: env baseline sensitivity copula systemic_bias_sensitivity derivation tables figures figures-tif test verify
 	@echo ""
 	@echo "=== make all complete. Artifacts under $(PROCESSED)/ $(FIGDIR)/ $(BUILD)/ $(REPRO)/ ==="
 

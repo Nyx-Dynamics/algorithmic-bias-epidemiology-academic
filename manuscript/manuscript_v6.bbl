@@ -1,0 +1,155 @@
+\begin{thebibliography}{10}
+
+\bibitem{bib_fuller}
+Fuller JB, Raman M, Sage-Gavin E, Hines K.
+\newblock Hidden Workers: Untapped Talent.
+\newblock Boston, MA: Harvard Business School Project on Managing the Future of
+  Work; 2021.
+
+\bibitem{bib_eeoc}
+{U S  Equal Employment Opportunity Commission}.
+\newblock Enforcement Guidance on the Consideration of Arrest and Conviction
+  Records in Employment Decisions Under Title VII.
+\newblock Washington, DC: EEOC; 2012.
+
+\bibitem{bib_ajunwa}
+Ajunwa I.
+\newblock The paradox of automation as anti-bias intervention.
+\newblock Cardozo Law Review. 2020;41:1671--1742.
+
+\bibitem{bib_raghavan}
+Raghavan M, Barocas S, Kleinberg J, Levy K.
+\newblock Mitigating bias in algorithmic hiring: evaluating claims and
+  practices.
+\newblock In: Proceedings of the Conference on Fairness, Accountability, and
+  Transparency (FAT*). ACM; 2020. p. 469--481.
+
+\bibitem{bib_cfpb_credit}
+{Consumer Financial Protection Bureau}.
+\newblock Consumer Credit Reports: A Study of Medical and Non-Medical
+  Collections.
+\newblock Washington, DC: CFPB; 2022.
+
+\bibitem{bib_obermeyer}
+Obermeyer Z, Powers B, Vogeli C, Mullainathan S.
+\newblock Dissecting racial bias in an algorithm used to manage the health of
+  populations.
+\newblock Science. 2019;366(6464):447--453.
+\newblock doi:{10.1126/science.aax2342}.
+
+\bibitem{bib_ustun}
+Ustun B, Spangher A, Liu Y.
+\newblock Actionable recourse in linear classification.
+\newblock In: Proceedings of the Conference on Fairness, Accountability, and
+  Transparency (FAT*). ACM; 2019. p. 10--19.
+
+\bibitem{bib_wachter}
+Wachter S, Mittelstadt B, Russell C.
+\newblock Counterfactual explanations without opening the black box: automated
+  decisions and the {GDPR}.
+\newblock Harvard Journal of Law \& Technology. 2018;31(2):841--887.
+
+\bibitem{bib_selbst}
+Selbst AD, Boyd D, Friedler SA, Venkatasubramanian S, Vertesi J.
+\newblock Fairness and abstraction in sociotechnical systems.
+\newblock In: Proceedings of the Conference on Fairness, Accountability, and
+  Transparency (FAT*). ACM; 2019. p. 59--68.
+
+\bibitem{bib_rausand}
+Rausand M, H{\o}yland A.
+\newblock System Reliability Theory: Models, Statistical Methods, and
+  Applications.
+\newblock 2nd ed. Hoboken, NJ: Wiley; 2004.
+
+\bibitem{bib_billinton}
+Billinton R, Allan RN.
+\newblock Reliability Evaluation of Engineering Systems: Concepts and
+  Techniques.
+\newblock 2nd ed. New York: Springer; 1992.
+
+\bibitem{bib_reason}
+Reason J.
+\newblock Human error: models and management.
+\newblock BMJ. 2000;320(7237):768--770.
+\newblock doi:{10.1136/bmj.320.7237.768}.
+
+\bibitem{bib_shapley}
+Shapley LS.
+\newblock A value for $n$-person games.
+\newblock In: Kuhn HW, Tucker AW, editors. Contributions to the Theory of
+  Games, Volume II. No.~28 in Annals of Mathematics Studies. Princeton
+  University Press; 1953. p. 307--317.
+
+\bibitem{bib_sobol}
+Sobol' IM.
+\newblock Global sensitivity indices for nonlinear mathematical models and
+  their {Monte} {Carlo} estimates.
+\newblock Mathematics and Computers in Simulation. 2001;55(1--3):271--280.
+\newblock doi:{10.1016/S0378-4754(00)00270-6}.
+
+\bibitem{bib_morris}
+Morris MD.
+\newblock Factorial sampling plans for preliminary computational experiments.
+\newblock Technometrics. 1991;33(2):161--174.
+\newblock doi:{10.1080/00401706.1991.10484804}.
+
+\bibitem{bib_cfpb_disputes}
+{Consumer Financial Protection Bureau}.
+\newblock Disputes on Consumer Credit Reports.
+\newblock Washington, DC: CFPB; 2022.
+\newblock Available from:
+  \url{https://www.consumerfinance.gov/data-research/research-reports/disputes-on-consumer-credit-reports/}.
+
+\bibitem{bib_cfpb_complaints}
+{Consumer Financial Protection Bureau}.
+\newblock Consumer Complaint Response Deficiencies of the Big Three Credit
+  Bureaus.
+\newblock Washington, DC: CFPB; 2022.
+
+\bibitem{bib_ftc}
+{Federal Trade Commission}.
+\newblock Report to Congress Under Section 319 of the Fair and Accurate Credit
+  Transactions Act of 2003: Fifth Interim Report.
+\newblock Washington, DC: FTC; 2013.
+
+\bibitem{bib_lsc}
+{Legal Services Corporation}.
+\newblock The Justice Gap: The Unmet Civil Legal Needs of Low-Income Americans.
+\newblock Washington, DC: LSC; 2022.
+\newblock Available from: \url{https://justicegap.lsc.gov/}.
+
+\bibitem{bib_seyyed}
+Seyyed-Kalantari L, Zhang H, McDermott MBA, Chen IY, Ghassemi M.
+\newblock Underdiagnosis bias of artificial intelligence algorithms applied to
+  chest radiographs in under-served patient populations.
+\newblock Nature Medicine. 2021;27(12):2176--2182.
+\newblock doi:{10.1038/s41591-021-01595-0}.
+
+\bibitem{bib_gichoya}
+Gichoya JW, Banerjee I, Bhimireddy AR, Burns JL, Celi LA, Chen LC, et~al.
+\newblock AI recognition of patient race in medical imaging: a modelling study.
+\newblock The Lancet Digital Health. 2022;4(6):e406--e414.
+\newblock doi:{10.1016/S2589-7500(22)00063-2}.
+
+\bibitem{bib_arora}
+Arora A, Alderman JE, Palmer J, Ganapathi S, Laws E, McCradden MD, et~al.
+\newblock The value of standards for health datasets in artificial
+  intelligence-based applications.
+\newblock Nature Medicine. 2023;29(11):2929--2938.
+\newblock doi:{10.1038/s41591-023-02608-w}.
+
+\bibitem{bib_alderman}
+Alderman JE, et~al.
+\newblock Tackling algorithmic bias and promoting transparency in health
+  datasets: the {STANDING} {Together} consensus recommendations.
+\newblock NEJM AI. 2025;2.
+\newblock doi:{10.1056/AIp2401088}.
+
+\bibitem{bib_hoche}
+Hoche M, Mineeva O, R{\"a}tsch G, Vayena E, Blasimme A.
+\newblock What makes clinical machine learning fair? A practical ethics
+  framework.
+\newblock PLOS Digital Health. 2025;4(3):e0000728.
+\newblock doi:{10.1371/journal.pdig.0000728}.
+
+\end{thebibliography}

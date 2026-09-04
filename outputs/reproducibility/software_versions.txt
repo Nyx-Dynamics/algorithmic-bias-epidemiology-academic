@@ -1,6 +1,6 @@
-Python 3.12.12 | packaged by conda-forge | (main, Oct 22 2025, 23:34:53) [Clang 19.1.7 ]
-platform macOS-26.2-arm64-arm-64bit
-numpy 2.3.5
-scipy 1.16.3
-pandas 2.3.3
-matplotlib 3.10.7
+Python 3.14.0 (v3.14.0:ebf955df7a8, Oct  7 2025, 08:20:14) [Clang 16.0.0 (clang-1600.0.26.6)]
+platform macOS-26.2-arm64-arm-64bit-Mach-O
+numpy 2.5.2
+scipy 1.18.1
+pandas 3.0.5
+matplotlib 3.11.1

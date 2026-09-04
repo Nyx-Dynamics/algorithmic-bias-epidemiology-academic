@@ -4,11 +4,17 @@ Algorithmic Bias Epidemiology Framework
 
 Comprehensive robustness testing for peer-reviewed publication including:
 1. One-at-a-time (OAT) parameter sensitivity
-2. Global sensitivity analysis (Sobol indices)
+2. Global sensitivity analysis via Monte Carlo A/B sampling with
+   Saltelli/Jansen Sobol estimators (n=1024 base samples)
 3. Morris elementary effects screening
 4. Signal-to-Noise Ratio (SNR) analysis
-5. Bootstrap confidence intervals
+5. Parameter-perturbation resampling confidence intervals
 6. Monte Carlo uncertainty quantification
+
+Note: the Sobol first/total indices use Monte Carlo A/B sampling with the
+Saltelli/Jansen estimators, NOT canonical quasi-random (low-discrepancy)
+Sobol sequence sampling. The uncertainty exercises are parameter-perturbation
+resampling, not nonparametric bootstrap of an empirical sample.
 
 Author: AC Demidont, DO
 Nyx Dynamics LLC
@@ -477,12 +483,53 @@ class SNRAnalysis:
 
         return pd.DataFrame(results)
 
+    def _three_way_factorial_share(self, noisy_model: 'BarrierModel') -> float:
+        """
+        Three-way factorial share (%) for a given (perturbed) barrier model.
+
+        Uses the SAME layer-level factorial decomposition as the canonical
+        baseline in barrier_visualization.py's `interaction_effects`: the
+        three-way term subtracts BOTH the main (individual-layer) effects AND
+        the pairwise interaction terms from the full three-layer removal effect.
+        This yields the canonical "three-way factorial share" estimand
+        (~87.6% at baseline), NOT the inflated quantity obtained by subtracting
+        only the main effects.
+        """
+        baseline = noisy_model.calculate_success()
+
+        # Main effects: removing each layer alone.
+        individual_effects = {}
+        for layer, indices in noisy_model.layer_indices.items():
+            individual_effects[layer] = (
+                noisy_model.calculate_success_removing(indices) - baseline
+            )
+
+        # Pairwise interaction terms: joint(layer pair) - sum of the pair's mains.
+        layers = list(noisy_model.layer_indices.keys())
+        pairwise_interactions = {}
+        for a, b in combinations(layers, 2):
+            keys = noisy_model.layer_indices[a] + noisy_model.layer_indices[b]
+            joint_effect = noisy_model.calculate_success_removing(keys) - baseline
+            expected_additive = individual_effects[a] + individual_effects[b]
+            pairwise_interactions[(a, b)] = joint_effect - expected_additive
+
+        # Full three-layer removal effect.
+        all_indices = list(range(noisy_model.n_barriers))
+        full_effect = noisy_model.calculate_success_removing(all_indices) - baseline
+
+        # Three-way factorial term = full - (sum mains + sum pairwise interactions).
+        sum_individual = sum(individual_effects.values())
+        sum_pairwise = sum(pairwise_interactions.values())
+        three_way = full_effect - (sum_individual + sum_pairwise)
+
+        return (three_way / full_effect * 100) if full_effect > 0 else 0
+
     def key_finding_robustness(self, n_bootstrap: int = 1000) -> Dict:
         """
         Test robustness of key findings to parameter uncertainty.
 
         Key findings tested:
-        1. Three-way interaction dominance (>80%)
+        1. Three-way factorial share under parameter perturbation (>80%)
         2. Individual barrier effects near zero
         3. Complete removal required for >90% success
         """
@@ -508,21 +555,10 @@ class SNRAnalysis:
 
             results['max_individual_effect'].append(max(individual_effects))
 
-            # 2. Calculate layer effects
-            layer_effects = {}
-            for layer, indices in noisy_model.layer_indices.items():
-                effect = noisy_model.calculate_success_removing(indices) - baseline
-                layer_effects[layer] = effect
-
-            # Pairwise and three-way
-            all_indices = list(range(self.model.n_barriers))
-            full_effect = noisy_model.calculate_success_removing(all_indices) - baseline
-
-            sum_individual_layers = sum(layer_effects.values())
-
-            # Three-way interaction (simplified calculation)
-            three_way = full_effect - sum_individual_layers
-            three_way_pct = (three_way / full_effect * 100) if full_effect > 0 else 0
+            # 2. Three-way factorial share (canonical decomposition: subtracts
+            #    BOTH main and pairwise terms). This is the same estimand as the
+            #    baseline 87.6%, evaluated under the perturbed parameters.
+            three_way_pct = self._three_way_factorial_share(noisy_model)
             results['three_way_interaction'].append(three_way_pct)
 
             # 3. How many barriers needed for 90%?
@@ -538,7 +574,7 @@ class SNRAnalysis:
 
         # Summarize
         summary = {
-            'three_way_interaction': {
+            'three_way_factorial_share': {
                 'mean': np.mean(results['three_way_interaction']),
                 'std': np.std(results['three_way_interaction']),
                 'ci_lower': np.percentile(results['three_way_interaction'], 2.5),
@@ -759,9 +795,9 @@ def plot_snr_analysis(snr_results: pd.DataFrame,
 
     # Panel C: Key Finding Robustness
     ax = axes[1, 0]
-    findings = ['Three-way\nInteraction\n>70%', 'Max Individual\nEffect\n<1%', 'Need 10+\nBarriers\nfor 90%']
+    findings = ['Three-way\nFactorial Share\n>70%', 'Max Individual\nEffect\n<1%', 'Need 10+\nBarriers\nfor 90%']
     robustness_scores = [
-        robustness_results['three_way_interaction']['finding_robust'] * 100,
+        robustness_results['three_way_factorial_share']['finding_robust'] * 100,
         robustness_results['max_individual_effect']['finding_robust'] * 100,
         robustness_results['barriers_for_90pct']['finding_robust'] * 100
     ]
@@ -776,8 +812,8 @@ def plot_snr_analysis(snr_results: pd.DataFrame,
         ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 1,
                f'{score:.1f}%', ha='center', fontsize=10, fontweight='bold')
 
-    ax.set_ylabel('% of Bootstrap Samples Supporting Finding', fontsize=10)
-    ax.set_title('C. Key Finding Robustness Under 10% Parameter Uncertainty',
+    ax.set_ylabel('% of Resamples Supporting Finding', fontsize=10)
+    ax.set_title('C. Key Finding Robustness Under 10% Parameter-Perturbation Resampling',
                 fontsize=12, fontweight='bold')
     ax.set_ylim(0, 105)
     ax.legend(loc='lower right')
@@ -917,10 +953,10 @@ def main():
 
     robustness = snr.key_finding_robustness(n_bootstrap=1000)
 
-    print("\nThree-way Interaction Dominance:")
-    r = robustness['three_way_interaction']
+    print("\nThree-way factorial share under parameter perturbation:")
+    r = robustness['three_way_factorial_share']
     print(f"  Mean: {r['mean']:.1f}% (95% CI: {r['ci_lower']:.1f}% - {r['ci_upper']:.1f}%)")
-    print(f"  Finding robust (>70%): {r['finding_robust']*100:.1f}% of bootstrap samples")
+    print(f"  Finding robust (>70%): {r['finding_robust']*100:.1f}% of resamples")
 
     print("\nIndividual Barrier Effects Near Zero:")
     r = robustness['max_individual_effect']
@@ -974,7 +1010,8 @@ def main():
 
     # Robustness summary
     robustness_df = pd.DataFrame([
-        {'finding': 'three_way_interaction', **robustness['three_way_interaction']},
+        {'finding': 'three_way_factorial_share_under_parameter_perturbation',
+         **robustness['three_way_factorial_share']},
         {'finding': 'max_individual_effect', **robustness['max_individual_effect']},
         {'finding': 'barriers_for_90pct', **robustness['barriers_for_90pct']}
     ])

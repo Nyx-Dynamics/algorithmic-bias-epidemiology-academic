@@ -632,15 +632,10 @@ def generate_visualizations(model: BarrierRemovalModel, output_dir: str = '.',
                'o-', label=label_map.get(name, name),
                color=colors_strat[name], linewidth=2, markersize=6)
 
-    # Compute strategy equivalence ANOVA
-    from scipy import stats as sp_stats
-    strategy_probs = [df['success_probability'].values for df in strategies.values()]
-    f_stat, p_val = sp_stats.f_oneway(*strategy_probs)
-
     ax.set_xlabel('Number of Barriers Removed', fontsize=12)
     ax.set_ylabel('Success Probability (%)', fontsize=12)
-    ax.set_title(f'Stepwise Barrier Removal: Strategy Comparison\n'
-                 f'(ANOVA: F={f_stat:.2f}, p={p_val:.2f} — all strategies converge only at complete removal)',
+    ax.set_title('Stepwise Barrier Removal: Strategy Comparison\n'
+                 '(all strategies converge only at complete removal)',
                 fontsize=14, fontweight='bold')
     ax.legend()
     ax.set_xlim(-0.5, 11.5)

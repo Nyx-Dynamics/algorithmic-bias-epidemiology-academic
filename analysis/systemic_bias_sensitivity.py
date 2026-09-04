@@ -8,6 +8,8 @@ removed/reclassified and report whether qualitative conclusions change.
 Reuses the validated BarrierRemovalModel (seed 42 for Shapley).
 """
 import argparse
+import json
+import os
 import numpy as np
 import barrier_visualization as bv
 
@@ -36,6 +38,8 @@ def summarize(model, label):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--outdir", type=str, default=None,
+                    help="If set, write systemic_bias_sensitivity.json here.")
     args = ap.parse_args()
     np.random.seed(args.seed)
 
@@ -43,29 +47,52 @@ def main():
     print("SYSTEMIC-BIAS PLACEMENT SENSITIVITY (Minor 2)")
     print("=" * 70)
 
-    full = bv.BarrierRemovalModel()
+    full = bv.BarrierRemovalModel(seed=args.seed)
     s_full = summarize(full, "11-barrier (as submitted)")
 
-    reduced = bv.BarrierRemovalModel()
+    reduced = bv.BarrierRemovalModel(seed=args.seed)
     # remove the Systemic Bias barrier (reclassify as upstream harm generation)
     key = next(k for k, b in reduced.barriers.items()
                if "Systemic Bias" in b.name)
     del reduced.barriers[key]
     s_red = summarize(reduced, "10-barrier (Systemic Bias removed)")
 
+    baseline_ok = bool(s_red['base'] < 0.01)
+    three_way_ok = bool(s_red['three_way'] > 50)
+    max_barrier_ok = bool(s_red['max_barrier'] < 0.0002)
+
     print("\n" + "-" * 70)
     print("QUALITATIVE COMPARISON")
     print("-" * 70)
     print(f"  baseline: {s_full['base']*100:.4f}% -> {s_red['base']*100:.4f}% "
-          f"(still << 1%: {'YES' if s_red['base'] < 0.01 else 'NO'})")
+          f"(still << 1%: {'YES' if baseline_ok else 'NO'})")
     print(f"  three-way share: {s_full['three_way']:.1f}% -> {s_red['three_way']:.1f}% "
-          f"(still dominant >50%: {'YES' if s_red['three_way'] > 50 else 'NO'})")
+          f"(still dominant >50%: {'YES' if three_way_ok else 'NO'})")
     print(f"  max single-barrier gain: {s_full['max_barrier']*100:.4f}% -> "
           f"{s_red['max_barrier']*100:.4f}% (still <0.02%: "
-          f"{'YES' if s_red['max_barrier'] < 0.0002 else 'NO'})")
+          f"{'YES' if max_barrier_ok else 'NO'})")
     print("\n  Conclusion: qualitative findings (near-zero baseline, negligible "
           "single-barrier\n  effects, interaction dominance) are unchanged by "
           "removing/reclassifying\n  the Systemic Bias barrier.")
+
+    if args.outdir:
+        os.makedirs(args.outdir, exist_ok=True)
+        out = {
+            "seed": args.seed,
+            "model_11_barrier": s_full,
+            "model_10_barrier_systemic_bias_removed": s_red,
+            "qualitative_unchanged": {
+                "baseline_still_below_1pct": baseline_ok,
+                "three_way_still_dominant_above_50pct": three_way_ok,
+                "max_single_barrier_still_below_0.02pct": max_barrier_ok,
+                "all_conclusions_unchanged": bool(
+                    baseline_ok and three_way_ok and max_barrier_ok),
+            },
+        }
+        path = os.path.join(args.outdir, "systemic_bias_sensitivity.json")
+        with open(path, "w") as fh:
+            json.dump(out, fh, indent=2, sort_keys=True)
+        print(f"\n  -> {path}")
 
 
 if __name__ == "__main__":
