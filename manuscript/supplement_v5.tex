@@ -1,0 +1,205 @@
+% ============================================================
+% PDIG-D-26-00342 v5 -- revised supplement (Major Revision)
+% v5 for finalization.
+% [SEED] = replace with seeded canonical output from `make` (repro gate)
+% [verify] = source page/table to confirm at finalization
+% The S-Deriv table below should be reconciled with build_derivation_table.py output.
+% ============================================================
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{changepage}
+\usepackage{textcomp,marvosym}
+\usepackage{nameref,hyperref}
+\usepackage[right]{lineno}
+\usepackage{xurl}
+\usepackage{graphicx}
+\usepackage{silence}
+\WarningFilter{latex}{Command \showhyphens has changed}
+\usepackage[nopatch=eqnum]{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{pdflscape}
+\usepackage{float}
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off,hypcap=false]{caption}
+\newcolumntype{+}{!{\vrule width 2pt}}
+\newlength\savedwidth
+\newcommand\thickhline{\noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}\hline\noalign{\global\arrayrulewidth\savedwidth}}
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in
+\textheight 8.75in
+\setlength{\emergencystretch}{2em}
+\usepackage{lastpage,fancyhdr}
+\pagestyle{fancy}\fancyhf{}\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+\fancyheadoffset[L]{2.25in}\fancyfootoffset[L]{2.25in}\lfoot{\today}
+
+\begin{document}
+\vspace*{0.2in}
+\begin{flushleft}
+{\Large \textbf\newline{Supporting information}}\newline\\
+Structural limits of single-barrier reform in algorithmic recourse: a formal series-system model with implications for digital health\\
+\medskip A.C.\ Demidont
+\end{flushleft}
+\bigskip
+\tableofcontents
+\newpage
+
+% ============================================================
+\section*{S1 Note. Scope of claims}
+\addcontentsline{toc}{section}{S1 Note. Scope of claims}
+Throughout, numerical results (baseline 0.0018\%, maximum single-barrier gain 0.0054\%, three-way share 87.6\%, and all Shapley/Sobol/Morris/bootstrap outputs) are \textbf{level-2} model illustrations generated from the chosen topology and parameterization; they are consistent with, but not independent confirmation of, Propositions~1--2 (level~1). Pass probabilities (Table~S-Deriv) are \textbf{level-3} provisional calibration assumptions. Statements about real recourse behavior or policy are \textbf{level-4} hypotheses.
+
+\newpage
+% ============================================================
+% S-DERIV: full parameter derivation (Major 7 / Minor 7)
+% Reconcile with repo build_derivation_table.py output at finalization.
+% ============================================================
+\clearpage
+\begin{landscape}
+\section*{S-Deriv Table. Parameter derivation audit trail (all 11 barriers)}
+\addcontentsline{toc}{section}{S-Deriv Table. Parameter derivation audit trail}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\captionof{table}{{\bf Parameter derivation audit trail.} For each barrier: target construct, source domain, exact source statistic, mapping rule, resulting pass probability, plausibility range, and transportability limitation. Auditable from this package alone; mirrored in \texttt{data/parameter\_sources/parameter\_derivation.md}. Source page/table references marked [verify] are to be confirmed at finalization.}
+\label{S_Deriv}
+\begin{longtable}{%
+ >{\raggedright\arraybackslash}p{2.3cm}
+ >{\raggedright\arraybackslash}p{1.4cm}
+ >{\raggedright\arraybackslash}p{2.2cm}
+ c
+ >{\raggedright\arraybackslash}p{2.0cm}
+ >{\raggedright\arraybackslash}p{2.6cm}
+ >{\raggedright\arraybackslash}p{3.0cm}%
+}
+\hline
+\textbf{Barrier (layer)} & \textbf{Source domain} & \textbf{Exact statistic [source]} & \textbf{$p$} & \textbf{Range} & \textbf{Mapping rule} & \textbf{Transportability limitation} \\
+\thickhline\endhead
+Rapid Data Transmission (L1) & Credit reporting & Furnishers transmit adverse data to CRAs within 1--2 days [CFPB 2022, verify] & 0.30 & 0.20--0.40 & $\sim$30\% intervene before propagation & Credit-furnishing timing; not measured for clinical/EHR data flows \\ \hline
+Multi-System Integration (L1) & Credit reporting & 20\% had error on $\geq$1 of 3 reports [FTC 2013, verify] & 0.55 & 0.40--0.65 & Complement of cross-system error rate & Cross-bureau error; not clinical multi-system integration \\ \hline
+Permanent Storage (L1) & Credit reporting & 7-yr retention; $<$20\% adverse tradelines removed in 4 yr [CFPB 2022; FCRA \S605, verify] & 0.45 & 0.35--0.55 & $\sim$45\% encounter unexpired adverse data & FCRA retention regime; not healthcare record retention \\ \hline
+Error Detection Difficulty (L2) & Credit reporting & 26\% identified material errors [FTC 2013, verify] & 0.35 & 0.25--0.45 & $\sim$35\% identify specific errors & Consumer credit review; not clinical error detection \\ \hline
+Correction Process Barriers (L2) & Credit reporting & 37\% of disputes fully resolved [FTC 2013; CFPB 2022, verify] & 0.35 & 0.25--0.45 & $\sim$35\% achieve full correction & Credit dispute process; not clinical data correction \\ \hline
+Incomplete Correction Propagation (L2) & Credit reporting & Corrections do not auto-propagate across CRAs [CFPB 2022; FTC 2015, verify] & 0.40 & 0.30--0.50 & $\sim$40\% propagate sufficiently & Inter-CRA propagation; not clinical systems \\ \hline
+Awareness Gap (L3) & Civil legal & Help sought for $\sim$1 in 4 substantial civil legal problems [LSC 2022, verify] & 0.30 & 0.20--0.40 & $\sim$30\% become aware of recourse & Civil legal need; not algorithmic-decision awareness specifically \\ \hline
+Record Access Barriers (L3) & Credit reporting & Statutory free-report access with practical barriers [FCRA \S612; CFPB 2022, verify] & 0.55 & 0.45--0.65 & Most navigable barrier ($\sim$55\%) & FCRA access; not clinical record access \\ \hline
+Legal Knowledge Gap (L3) & Civil legal & 39\% believe they can use the legal system to protect their rights [LSC 2022, verify] & 0.25 & 0.15--0.35 & $\sim$25\% know specific algorithmic rights & General legal confidence; not algorithm-specific rights knowledge \\ \hline
+Legal Resource Barriers (L3) & Civil legal & 46\% cite cost; $\sim$50\% of applicants turned away [LSC 2022, verify] & 0.40 & 0.30--0.50 & $\sim$40\% with knowledge access resources & Civil legal aid capacity; not algorithm-specific representation \\ \hline
+Systemic Bias in Algorithms (L3) & Healthcare audit & Cost-for-need proxy bias; correction raises Black enrollment 17.7\%$\to$46.5\% [Obermeyer 2019] & 0.30 & 0.20--0.40 & $\sim$30\% recourse not defeated by residual system bias & Single commercial tool / one health system; NOT a population-wide bias rate (prior ``62\%'' figure was erroneous and is corrected) \\
+\hline
+\end{longtable}
+\end{landscape}
+\clearpage
+
+% ============================================================
+\section*{S2 Table. Individual barrier removal effects}
+\addcontentsline{toc}{section}{S2 Table. Individual barrier removal effects}
+Baseline $P=0.0018\%$; $\Delta$ = marginal effect of removing each barrier; 95\% CI from seeded bootstrap ($n=1{,}000$). All $\Delta<0.02\%$ (Proposition~1). Maximum: Legal Knowledge Gap, $\Delta=0.0054\%$. [SEED: confirm CIs from seeded run.]
+
+% ============================================================
+\section*{S3 Table. Layer interaction decomposition (corrected)}
+\addcontentsline{toc}{section}{S3 Table. Layer interaction decomposition}
+\begin{table}[!ht]\centering
+\caption{{\bf Baseline-relative factorial decomposition of achievable improvement.} Values match the code, Fig~3 heatmap, and S-figures. (Corrects a stale main-text table in the prior submission.)}
+\label{S3}
+\begin{tabular}{l c}
+\hline \textbf{Effect} & \textbf{Share of achievable improvement (\%)} \\ \thickhline
+L1 (Data Integration) & 0.02 \\
+L2 (Data Accuracy) & 0.03 \\
+L3 (Institutional) & 0.36 \\ \hline
+L1 $\times$ L2 & 0.44 \\
+L1 $\times$ L3 & 4.51 \\
+L2 $\times$ L3 & 7.03 \\ \hline
+L1 $\times$ L2 $\times$ L3 (three-way) & 87.60 \\ \thickhline
+Total & 100.0 \\ \hline
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section*{S4 Table. Shapley value attribution}
+\addcontentsline{toc}{section}{S4 Table. Shapley value attribution}
+Seeded canonical Shapley attribution (seed 42, \%): Legal Knowledge Gap 10.95; Rapid Data Transmission 10.72; Systemic Bias in Algorithms 10.53; Incomplete Correction Propagation 10.10; Awareness Gap 9.67; Error Detection Difficulty 9.53; Correction Process Barriers 9.21; Legal Resource Barriers 8.50; Permanent Storage 7.79; Record Access Barriers 6.79; Multi-System Integration 6.21. Contributions are comparatively even (no barrier $>$11\%) and span all three layers, consistent with interaction-driven structure.
+
+% ============================================================
+\section*{S5 Table. Sobol sensitivity indices}
+\addcontentsline{toc}{section}{S5 Table. Sobol sensitivity indices}
+Seeded canonical run (seed 42): total-order ($S_T$) exceeded first-order ($S_1$) for \emph{all} barriers, but the $S_T-S_1$ gaps are small and, for several barriers, within Monte-Carlo error at the current Saltelli sample size---so the earlier phrasing ``substantially exceeded for all barriers'' is not supported. (The reviewer cited the prior unseeded values for Awareness/Legal Knowledge; under seeding the smallest gaps fall on Correction Process/Legal Resource, underscoring that these per-barrier orderings are sampling-sensitive.) Finalization option: increase $n$ to tighten the indices.
+
+% ============================================================
+\section*{S6 Table. Robustness under bounded perturbation}
+\addcontentsline{toc}{section}{S6 Table. Robustness under bounded perturbation}
+\begin{table}[!ht]\centering
+\caption{{\bf Stability of key findings within the prespecified $\pm10\%$ perturbation scenario} ($n=1{,}000$ resamples). Reported as stability within bounded scenarios, not robustness under arbitrary uncertainty; see S7 for coefficient-of-variation escalation.}
+\label{S6}
+\begin{tabular}{l c c}
+\hline \textbf{Finding} & \textbf{Threshold} & \textbf{\% resamples supporting} \\ \thickhline
+Three-way share high & $>$70\% & 100.0 \\
+Max individual effect small & $<$1\% & 100.0 \\
+Barriers needed for 90\% success & $\geq$10 of 11 & 100.0 \\ \hline
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section*{S7 Table. Signal-to-noise and output variability}
+\addcontentsline{toc}{section}{S7 Table. Signal-to-noise and output variability}
+\begin{table}[!ht]\centering
+\caption{{\bf SNR and coefficient of variation (CV) by parameter-noise level.} Robustness is bounded: CV rises steeply above $\sim$15\% noise, reaching 73.2\% at 25\% and 93.8\% at 30\%. Robustness is therefore claimed only within bounded scenarios.}
+\label{S7}
+\begin{tabular}{c c c c}
+\hline \textbf{Noise (\%)} & \textbf{SNR (dB)} & \textbf{Quality} & \textbf{CV (\%)} \\ \thickhline
+1 & 14.8 & Good & 3.3 \\
+2 & 11.7 & Good & 6.8 \\
+5 & 7.8 & Marginal & 16.6 \\
+10 & 4.6 & Marginal & 35.1 \\
+15 & 2.8 & Marginal & 53.0 \\
+20 & 1.4 & Marginal & 73.0 \\
+25 & $-0.4$ & Poor & 109.8 \\
+30 & $-1.1$ & Poor & 128.7 \\ \hline
+\end{tabular}
+\begin{flushleft}\footnotesize Seeded canonical values (seed 42). These replace the prior unseeded values; the output is small and right-skewed, so CV point estimates are sampling-sensitive at the current $n$ (finalization option: increase $n$ to stabilize).\end{flushleft}
+\end{table}
+
+% ============================================================
+% S-COPULA: Major-4 robustness (exact values from copula_robustness.py, seed 42)
+% ============================================================
+\section*{S-Copula Table. Robustness to alternative topologies (Major 4)}
+\addcontentsline{toc}{section}{S-Copula Table. Alternative-topology robustness}
+\begin{table}[!ht]\centering
+\caption{{\bf Correlated-barrier (Gaussian copula) and repeated-attempt robustness} (seed 42, $n=100{,}000$). The comparative conclusion (single-layer $\ll$ coordinated) is robust to correlation; the baseline value is correlation-sensitive; repeated attempts attenuate interaction dominance, delimiting the domain of validity.}
+\label{SCopula}
+\begin{tabular}{l r r r r}
+\hline \textbf{Scenario} & \textbf{Baseline $P$} & \textbf{3-way share} & \textbf{max 1-barrier} & \textbf{max 1-layer} \\ \thickhline
+Independence ($\rho=0$) & 0.0018\% & 87.6\% & 0.0054\% & 0.36\% \\
+Copula $\rho=0.1$ & 0.049\% & 84.5\% & 0.071\% & 0.97\% \\
+Copula $\rho=0.2$ & 0.288\% & 81.9\% & 0.185\% & 1.85\% \\
+Copula $\rho=0.3$ & 0.835\% & 79.9\% & 0.376\% & 2.74\% \\
+Copula $\rho=0.4$ & 1.778\% & 78.5\% & 0.606\% & 3.71\% \\
+Copula $\rho=0.5$ & 3.200\% & 77.4\% & 0.821\% & 4.50\% \\ \hline
+Block copula $\rho=0.5$ & 0.151\% & 66.0\% & 0.142\% & --- \\ \hline
+Repeated attempts $m=2$ & 0.352\% & 53.3\% & 0.452\% & 5.70\% \\
+Repeated attempts $m=3$ & 3.651\% & 25.2\% & 2.665\% & 16.88\% \\ \hline
+\end{tabular}
+\end{table}
+
+At $\rho=0.5$ the best single-layer intervention (4.50\%) remains far below coordinated removal (96.8\% total), so the comparative/threshold conclusion holds across the correlation sweep; under repeated attempts it attenuates, bounding the model's validity to approximately single-pass serial recourse.
+
+% ============================================================
+\section*{Figure legends}
+\addcontentsline{toc}{section}{Figure legends}
+\paragraph*{S1 Fig.} Shapley attribution across barriers (seeded); five highest contributors span all three layers.
+\paragraph*{S2 Fig.} Layer-removal effects; single-layer removal negligible; largest two-layer combination is Data Accuracy + Institutional ($\sim$7.4\%); only all-three removal reaches 100\%.
+\paragraph*{S3 Fig.} Alternative-topology robustness: baseline $P$ and three-way share vs.\ copula $\rho$, with repeated-attempt points ($m=2,3$).
+
+% ============================================================
+\section*{Code and data availability}
+\addcontentsline{toc}{section}{Code and data availability}
+All code, data, and a one-command \texttt{make} reproduction pipeline (seed 42) are at \url{https://github.com/Nyx-Dynamics/algorithmic-bias-epidemiology-academic}, archived at Zenodo (DOI:10.5281/zenodo.18746745). Key scripts: \texttt{barrier\_visualization.py}, \texttt{sensitivity\_analysis.py}, \texttt{copula\_robustness.py}, \texttt{build\_derivation\_table.py}. Environment: Python 3.10+, NumPy, SciPy, Matplotlib. Random seed 42 (now enforced in all stochastic routines).
+
+\end{document}
