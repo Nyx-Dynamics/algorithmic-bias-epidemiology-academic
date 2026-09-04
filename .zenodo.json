@@ -1,0 +1,40 @@
+{
+  "title": "Structural limits of single-barrier reform in algorithmic recourse: a formal series-system model (analysis code and data)",
+  "version": "v2.0.0",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "MIT",
+  "creators": [
+    {
+      "name": "Demidont, A. C.",
+      "affiliation": "Nyx Dynamics LLC, Philadelphia, Pennsylvania, USA",
+      "orcid": "0000-0002-9216-8569"
+    }
+  ],
+  "description": "Analysis code, derived data, and a one-command reproducibility pipeline for the manuscript 'Structural limits of single-barrier reform in algorithmic recourse: a formal series-system model with implications for digital health' (PLOS Digital Health, PDIG-D-26-00342). A formal 11-stage multiplicative series-system model of algorithmic recourse across three layers (data integration, data accuracy, institutional access), parameterized from federal datasets (CFPB, FTC, LSC) and one healthcare algorithmic audit. Includes: closed-form single-barrier bound and higher-order-interaction propositions; factorial decomposition; Shapley attribution; Sobol and Morris sensitivity; alternative-topology robustness (Gaussian-copula and repeated-attempt); systemic-bias placement sensitivity; and a full parameter-derivation audit trail. All stochastic analyses are seeded (seed 42) and reproducible via `make all` / `make verify`, with regression tests pinning the deterministic headline values (baseline 0.0018%, maximum single-barrier gain 0.0054%, three-way factorial share 87.6%). v2.0.0 corresponds to the PLOS Digital Health major-revision package.",
+  "keywords": [
+    "algorithmic recourse",
+    "algorithmic fairness",
+    "series-system reliability model",
+    "sensitivity analysis",
+    "Shapley value",
+    "Sobol indices",
+    "reproducibility",
+    "digital health governance",
+    "clinical AI"
+  ],
+  "notes": "Version 2.0.0 (PLOS Digital Health major revision). Changes from v1: reframed as a formal cross-domain model; all stochastic analyses seeded and made reproducible (seed 42); added copula and repeated-attempt alternative-topology robustness (copula_robustness.py); added systemic-bias placement sensitivity; added parameter-derivation audit trail; corrected the three-way robustness estimand and the main-text interaction table; removed the strategy-comparison ANOVA; quarantined pre-PDIG legacy scripts; added a Makefile pipeline and regression tests; relicensed code under MIT.",
+  "related_identifiers": [
+    {
+      "identifier": "10.64898/2026.02.22.26346836",
+      "relation": "isSupplementTo",
+      "scheme": "doi",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "https://github.com/Nyx-Dynamics/algorithmic-bias-epidemiology-academic",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}
