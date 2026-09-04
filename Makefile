@@ -24,6 +24,7 @@ PROCESSED    := $(DATA)/processed
 PARAM_DIR    := $(DATA)/parameter_sources
 BUILD        ?= build
 FIGDIR       := $(BUILD)/figures
+MSFIGDIR     := manuscript/figures
 REPRO        := outputs/reproducibility
 FIG_FORMAT   ?= tiff
 FIG_DPI      ?= 300
@@ -81,7 +82,7 @@ env: check-env | $(REPRO)
 	@$(PY) $(MANIFEST_SCRIPT) --seed $(SEED) --out $(REPRO)/run_manifest.json --versions-out $(REPRO)/software_versions.txt --targets env >/dev/null
 	@echo "env ready (see $(REPRO)/software_versions.txt)"
 
-$(BUILD) $(FIGDIR) $(PROCESSED) $(PARAM_DIR) $(REPRO):
+$(BUILD) $(FIGDIR) $(MSFIGDIR) $(PROCESSED) $(PARAM_DIR) $(REPRO):
 	@mkdir -p $@
 
 baseline: | $(PROCESSED) $(FIGDIR) $(REPRO)
@@ -121,14 +122,25 @@ derivation: check-deriv-script | $(PARAM_DIR) $(BUILD)
 
 derivations: derivation
 
-figures: | $(FIGDIR)
+# figures: regenerate ALL manuscript figures (barrier + sensitivity + copula) as
+# seeded PNGs into the canonical, tracked manuscript/figures dir so committed
+# figures are never stale. Use `make figures-tif` for submission-ready TIFFs.
+figures: | $(MSFIGDIR)
 	@test -f $(VIZ_SCRIPT) || { echo "ERROR: $(VIZ_SCRIPT) not found"; exit 1; }
-	@echo ">> Regenerating figures: format=$(FIG_FORMAT) dpi=$(FIG_DPI)"
-	@$(PY) $(VIZ_SCRIPT) --seed $(SEED) --outdir $(FIGDIR) --fig-format $(FIG_FORMAT) --dpi $(FIG_DPI)
-	@$(PY) $(SENS_SCRIPT) --seed $(SEED) --outdir $(FIGDIR) --fig-format $(FIG_FORMAT) --dpi $(FIG_DPI) >/dev/null
+	@test -f $(COPULA_SCRIPT) || { echo "ERROR: $(COPULA_SCRIPT) not found"; exit 1; }
+	@echo ">> Regenerating ALL figures (seed=$(SEED)) -> $(MSFIGDIR) (png, $(FIG_DPI) dpi)"
+	@$(PY) $(VIZ_SCRIPT)  --seed $(SEED) --outdir $(MSFIGDIR) --fig-format png --dpi $(FIG_DPI)
+	@$(PY) $(SENS_SCRIPT) --seed $(SEED) --outdir $(MSFIGDIR) --fig-format png --dpi $(FIG_DPI) >/dev/null
+	@$(PY) $(COPULA_SCRIPT) --seed $(SEED) --rho-min $(RHO_MIN) --rho-max $(RHO_MAX) --rho-step $(RHO_STEP) --n $(COPULA_N) --outdir $(PROCESSED) --figdir $(MSFIGDIR) --fig-format png --dpi $(FIG_DPI) >/dev/null
+	@echo "   -> refreshed: individual_barrier_effects, stepwise_comparison, layer_effects, interaction_heatmap, shapley_attribution, sensitivity_analysis, snr_robustness, FigX_copula_robustness (.png)"
 
-figures-tif:
-	@$(MAKE) figures FIG_FORMAT=tiff FIG_DPI=300
+# figures-tif: submission-ready .tif at 300 dpi into build/figures (validate via PLOS NAAS)
+figures-tif: | $(FIGDIR)
+	@echo ">> Regenerating ALL figures as TIFF -> $(FIGDIR) (300 dpi)"
+	@$(PY) $(VIZ_SCRIPT)  --seed $(SEED) --outdir $(FIGDIR) --fig-format tiff --dpi 300
+	@$(PY) $(SENS_SCRIPT) --seed $(SEED) --outdir $(FIGDIR) --fig-format tiff --dpi 300 >/dev/null
+	@$(PY) $(COPULA_SCRIPT) --seed $(SEED) --rho-min $(RHO_MIN) --rho-max $(RHO_MAX) --rho-step $(RHO_STEP) --n $(COPULA_N) --outdir $(PROCESSED) --figdir $(FIGDIR) --fig-format tiff --dpi 300 >/dev/null
+	@echo "   -> $(FIGDIR)/*.tiff (validate via PLOS NAAS before upload)"
 
 tables: baseline sensitivity
 	@echo ">> Computational CSV tables regenerated under $(PROCESSED)/"
@@ -156,7 +168,7 @@ verify: | $(REPRO)
 	@$(PY) $(MANIFEST_SCRIPT) --seed $(SEED) --out $(REPRO)/run_manifest.json --versions-out $(REPRO)/software_versions.txt --targets verify --outputs $(PROCESSED)/shapley_values.csv $(PROCESSED)/copula_sweep.csv $(REPRO)/baseline_verification.json
 	@echo "   -> $(REPRO)/baseline_verification.json ; $(REPRO)/run_manifest.json"
 
-all: env baseline sensitivity copula derivation tables figures-tif test verify
+all: env baseline sensitivity copula derivation tables figures figures-tif test verify
 	@echo ""
 	@echo "=== make all complete. Artifacts under $(PROCESSED)/ $(FIGDIR)/ $(BUILD)/ $(REPRO)/ ==="
 
