@@ -1,0 +1,30 @@
+{
+  "git_commit_sha": "022f45a26f3ee2dc4d93bbb90565bea6ce38fc11",
+  "run_timestamp_utc": "2026-09-04T14:21:27.672913+00:00",
+  "python_version": "3.12.12",
+  "platform": "macOS-26.2-arm64-arm-64bit",
+  "package_versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3",
+    "pandas": "2.3.3",
+    "matplotlib": "3.10.7"
+  },
+  "random_seed": 42,
+  "input_checksums": {
+    "analysis/barrier_definitions.csv": "29fb01b95d12b87c850d32f1cfa183e49d6f05e4a57966ee875d262d328a7a04"
+  },
+  "executed_targets": [
+    "verify"
+  ],
+  "generated_outputs": [
+    "data/processed/shapley_values.csv",
+    "data/processed/copula_sweep.csv",
+    "outputs/reproducibility/baseline_verification.json"
+  ],
+  "headline_results": {
+    "baseline_success": 1.8009337500000003e-05,
+    "baseline_pct": 0.0018009337500000003,
+    "max_single_barrier_gain_pct": 0.005402801250000001,
+    "three_way_interaction_share_pct": 87.60303281625
+  }
+}

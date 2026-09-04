@@ -1,0 +1,122 @@
+{
+  "paf_by_population": {
+    "general": {
+      "paf": 0.16666666666666669,
+      "name": "General Population",
+      "prevalence_exposed": 0.4,
+      "relative_risk": 1.5,
+      "population_size": 260000000,
+      "description": "Adults who have interacted with algorithmic screening"
+    },
+    "pwid": {
+      "paf": 0.6515679442508711,
+      "name": "People Who Inject Drugs (PWID)",
+      "prevalence_exposed": 0.85,
+      "relative_risk": 3.2,
+      "population_size": 3700000,
+      "description": "Higher exposure through criminal justice, healthcare, employment"
+    },
+    "pwh": {
+      "paf": 0.49494949494949486,
+      "name": "People With HIV (PWH)",
+      "prevalence_exposed": 0.7,
+      "relative_risk": 2.4,
+      "population_size": 1200000,
+      "description": "Algorithmic exclusion from clinical trials, insurance, employment"
+    },
+    "justice_involved": {
+      "paf": 0.7361477572559366,
+      "name": "Justice-Involved",
+      "prevalence_exposed": 0.9,
+      "relative_risk": 4.1,
+      "population_size": 19000000,
+      "description": "Criminal records in background checks, employment screening"
+    },
+    "formerly_unhoused": {
+      "paf": 0.5901639344262295,
+      "name": "Formerly Unhoused",
+      "prevalence_exposed": 0.8,
+      "relative_risk": 2.8,
+      "population_size": 3500000,
+      "description": "Housing history in tenant screening algorithms"
+    },
+    "black_americans": {
+      "paf": 0.3769470404984424,
+      "name": "Black Americans",
+      "prevalence_exposed": 0.55,
+      "relative_risk": 2.1,
+      "population_size": 47000000,
+      "description": "Documented bias in credit, employment, healthcare algorithms"
+    },
+    "disabled": {
+      "paf": 0.3506493506493506,
+      "name": "People with Disabilities",
+      "prevalence_exposed": 0.6,
+      "relative_risk": 1.9,
+      "population_size": 42000000,
+      "description": "Employment screening, insurance algorithms"
+    }
+  },
+  "national_burden": {
+    "by_population": {
+      "general": {
+        "population": "General Population",
+        "population_size": 260000000,
+        "paf": 0.16666666666666669,
+        "total_adverse_outcomes": 52000000,
+        "attributable_to_algorithms": 8666666,
+        "potentially_preventable": 8666666
+      },
+      "pwid": {
+        "population": "People Who Inject Drugs (PWID)",
+        "population_size": 3700000,
+        "paf": 0.6515679442508711,
+        "total_adverse_outcomes": 740000,
+        "attributable_to_algorithms": 482160,
+        "potentially_preventable": 482160
+      },
+      "pwh": {
+        "population": "People With HIV (PWH)",
+        "population_size": 1200000,
+        "paf": 0.49494949494949486,
+        "total_adverse_outcomes": 240000,
+        "attributable_to_algorithms": 118787,
+        "potentially_preventable": 118787
+      },
+      "justice_involved": {
+        "population": "Justice-Involved",
+        "population_size": 19000000,
+        "paf": 0.7361477572559366,
+        "total_adverse_outcomes": 3800000,
+        "attributable_to_algorithms": 2797361,
+        "potentially_preventable": 2797361
+      },
+      "formerly_unhoused": {
+        "population": "Formerly Unhoused",
+        "population_size": 3500000,
+        "paf": 0.5901639344262295,
+        "total_adverse_outcomes": 700000,
+        "attributable_to_algorithms": 413114,
+        "potentially_preventable": 413114
+      },
+      "black_americans": {
+        "population": "Black Americans",
+        "population_size": 47000000,
+        "paf": 0.3769470404984424,
+        "total_adverse_outcomes": 9400000,
+        "attributable_to_algorithms": 3543302,
+        "potentially_preventable": 3543302
+      },
+      "disabled": {
+        "population": "People with Disabilities",
+        "population_size": 42000000,
+        "paf": 0.3506493506493506,
+        "total_adverse_outcomes": 8400000,
+        "attributable_to_algorithms": 2945454,
+        "potentially_preventable": 2945454
+      }
+    },
+    "total_attributable_cases": 15086844,
+    "methodology": "Population Attributable Fraction with Levin formula"
+  }
+}

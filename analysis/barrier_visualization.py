@@ -6,12 +6,13 @@ Generates publication-quality figures and CSV exports for:
 1. Individual barrier removal effects
 2. Stepwise cumulative removal strategies
 3. Layer interaction heatmaps
-4. Cost-effectiveness analysis
+4. Shapley value attribution
 
 Author: AC Demidont, DO
 Nyx Dynamics LLC
 """
 
+import argparse
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -21,6 +22,10 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple
 import itertools
 import math
+
+# Default deterministic seed for all stochastic outputs (Shapley sampling,
+# random stepwise-removal ordering). Overridable via --seed on the CLI.
+DEFAULT_SEED = 42
 
 
 @dataclass
@@ -42,9 +47,12 @@ class BarrierRemovalModel:
     of the algorithmic bias barrier system.
     """
 
-    def __init__(self):
+    def __init__(self, seed: int = DEFAULT_SEED):
         self.barriers = self._define_barriers()
         self.layers = ['data_integration', 'data_accuracy', 'institutional']
+        self.seed = seed
+        # Single deterministic generator threaded through every stochastic step.
+        self.rng = np.random.default_rng(seed)
 
     def _define_barriers(self) -> Dict[str, Barrier]:
         """Define the 11-barrier model."""
@@ -200,10 +208,13 @@ class BarrierRemovalModel:
         - forward: Layer 1 → 2 → 3
         - backward: Layer 3 → 2 → 1
         - optimal: Greedy by impact
-        - cost_optimal: Greedy by cost-effectiveness
         - random: Random order (average of 10 runs)
         """
         strategies = {}
+
+        # Reseed so the random-order strategy is reproducible regardless of how
+        # many times this method (or shapley_values) has already been called.
+        self.rng = np.random.default_rng(self.seed)
 
         # Forward: Layer 1 → 2 → 3
         forward_order = (
@@ -224,14 +235,11 @@ class BarrierRemovalModel:
         # Optimal: Greedy by impact
         strategies['optimal'] = self._greedy_removal_by_impact()
 
-        # Cost-optimal: Greedy by cost-effectiveness
-        strategies['cost_optimal'] = self._greedy_removal_by_cost()
-
         # Random: Average of multiple runs
         random_results = []
         for _ in range(10):
             order = list(self.barriers.keys())
-            np.random.shuffle(order)
+            self.rng.shuffle(order)
             random_results.append(self._stepwise_removal(order))
 
         # Average random runs
@@ -324,7 +332,12 @@ class BarrierRemovalModel:
         return pd.DataFrame(results)
 
     def _greedy_removal_by_cost(self) -> pd.DataFrame:
-        """Greedy removal by cost-effectiveness (impact per dollar)."""
+        """Greedy removal by cost-effectiveness (impact per dollar).
+
+        DEPRECATED: Removed from manuscript analysis. Cost-effectiveness
+        strategy requires well-defined cost models to be scientifically
+        supportable. Retained for archival purposes only.
+        """
         results = []
         removed = []
         remaining = list(self.barriers.keys())
@@ -521,12 +534,15 @@ class BarrierRemovalModel:
 
         shapley = {key: 0.0 for key in all_keys}
 
+        # Reseed so Shapley sampling is reproducible regardless of prior RNG use.
+        self.rng = np.random.default_rng(self.seed)
+
         # For computational tractability, sample orderings
         n_samples = min(1000, math.factorial(n))
 
         for _ in range(n_samples):
             order = list(all_keys)
-            np.random.shuffle(order)
+            self.rng.shuffle(order)
 
             removed = []
             prev_success = baseline
@@ -553,8 +569,12 @@ class BarrierRemovalModel:
         return pd.DataFrame(results).sort_values('shapley_value', ascending=False)
 
 
-def generate_visualizations(model: BarrierRemovalModel, output_dir: str = '.'):
+def generate_visualizations(model: BarrierRemovalModel, output_dir: str = '.',
+                            fig_format: str = 'png', dpi: int = 300):
     """Generate all visualizations for barrier removal analysis."""
+    ext = fig_format.lower()
+    if ext == 'tif':
+        ext = 'tiff'
 
     # 1. Individual barrier effects
     individual_df = model.individual_barrier_effects()
@@ -585,7 +605,7 @@ def generate_visualizations(model: BarrierRemovalModel, output_dir: str = '.'):
     ax.grid(True, alpha=0.3, axis='x')
 
     plt.tight_layout()
-    plt.savefig(f'{output_dir}/individual_barrier_effects.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'{output_dir}/individual_barrier_effects.{ext}', dpi=dpi, bbox_inches='tight')
     plt.close()
 
     # 2. Stepwise removal strategies
@@ -597,18 +617,30 @@ def generate_visualizations(model: BarrierRemovalModel, output_dir: str = '.'):
         'forward': '#2ecc71',
         'backward': '#e74c3c',
         'optimal': '#9b59b6',
-        'cost_optimal': '#f39c12',
         'random': '#95a5a6',
+    }
+
+    label_map = {
+        'forward': 'Forward (L1→L2→L3)',
+        'backward': 'Backward (L3→L2→L1)',
+        'optimal': 'Greedy (Marginal Impact)',
+        'random': 'Random (Avg. 10 runs)',
     }
 
     for name, df in strategies.items():
         ax.plot(df['barriers_removed'], df['success_probability'] * 100,
-               'o-', label=name.replace('_', ' ').title(),
+               'o-', label=label_map.get(name, name),
                color=colors_strat[name], linewidth=2, markersize=6)
+
+    # Compute strategy equivalence ANOVA
+    from scipy import stats as sp_stats
+    strategy_probs = [df['success_probability'].values for df in strategies.values()]
+    f_stat, p_val = sp_stats.f_oneway(*strategy_probs)
 
     ax.set_xlabel('Number of Barriers Removed', fontsize=12)
     ax.set_ylabel('Success Probability (%)', fontsize=12)
-    ax.set_title('Stepwise Barrier Removal: Strategy Comparison\n(All strategies converge only at complete removal)',
+    ax.set_title(f'Stepwise Barrier Removal: Strategy Comparison\n'
+                 f'(ANOVA: F={f_stat:.2f}, p={p_val:.2f} — all strategies converge only at complete removal)',
                 fontsize=14, fontweight='bold')
     ax.legend()
     ax.set_xlim(-0.5, 11.5)
@@ -616,7 +648,7 @@ def generate_visualizations(model: BarrierRemovalModel, output_dir: str = '.'):
     ax.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig(f'{output_dir}/stepwise_comparison.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'{output_dir}/stepwise_comparison.{ext}', dpi=dpi, bbox_inches='tight')
     plt.close()
 
     # 3. Layer removal effects
@@ -652,7 +684,7 @@ def generate_visualizations(model: BarrierRemovalModel, output_dir: str = '.'):
     ax.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig(f'{output_dir}/layer_effects.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'{output_dir}/layer_effects.{ext}', dpi=dpi, bbox_inches='tight')
     plt.close()
 
     # 4. Interaction heatmap
@@ -698,7 +730,7 @@ def generate_visualizations(model: BarrierRemovalModel, output_dir: str = '.'):
 
     plt.colorbar(im, ax=ax, label='Effect (%)')
     plt.tight_layout()
-    plt.savefig(f'{output_dir}/interaction_heatmap.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'{output_dir}/interaction_heatmap.{ext}', dpi=dpi, bbox_inches='tight')
     plt.close()
 
     # 5. Shapley values
@@ -727,7 +759,7 @@ def generate_visualizations(model: BarrierRemovalModel, output_dir: str = '.'):
     ax.grid(True, alpha=0.3, axis='x')
 
     plt.tight_layout()
-    plt.savefig(f'{output_dir}/shapley_attribution.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'{output_dir}/shapley_attribution.{ext}', dpi=dpi, bbox_inches='tight')
     plt.close()
 
     print(f"Visualizations saved to {output_dir}/")
@@ -785,14 +817,36 @@ def export_csv_data(model: BarrierRemovalModel, output_dir: str = '.'):
     print(f"CSV files exported to {output_dir}/")
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Barrier removal visualization and CSV export (seeded)."
+    )
+    parser.add_argument('--seed', type=int, default=DEFAULT_SEED,
+                        help=f'Random seed for stochastic outputs (default {DEFAULT_SEED}).')
+    parser.add_argument('--outdir', type=str, default='.',
+                        help='Directory for figures and CSV outputs (default current dir).')
+    # Accepted for CLI parity with the Makefile figure target; unused here but
+    # tolerated so `make figures` can pass a common flag set to both scripts.
+    parser.add_argument('--fig-format', type=str, default='png',
+                        help='Figure format extension (default png).')
+    parser.add_argument('--dpi', type=int, default=300,
+                        help='Figure resolution in DPI (default 300).')
+    return parser.parse_args()
+
+
 def main():
     """Run barrier removal analysis and generate outputs."""
+    args = parse_args()
+    import os
+    os.makedirs(args.outdir, exist_ok=True)
+
     print("=" * 80)
     print("BARRIER REMOVAL VISUALIZATION AND DATA EXPORT")
     print("Algorithmic Bias Epidemiology")
+    print(f"seed={args.seed}  outdir={args.outdir}")
     print("=" * 80)
 
-    model = BarrierRemovalModel()
+    model = BarrierRemovalModel(seed=args.seed)
 
     # Summary statistics
     baseline = model.calculate_baseline_success()
@@ -803,8 +857,9 @@ def main():
     print(f"Maximum improvement possible: {(full_success - baseline)*100:.1f}%")
 
     # Generate outputs
-    generate_visualizations(model)
-    export_csv_data(model)
+    generate_visualizations(model, output_dir=args.outdir,
+                            fig_format=args.fig_format, dpi=args.dpi)
+    export_csv_data(model, output_dir=args.outdir)
 
     # Print key findings
     print("\n" + "=" * 80)

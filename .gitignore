@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+.idea/
+*.bak
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.synctex.gz
+# Make/repro build outputs (regenerate via `make`)
+build/

@@ -14,6 +14,8 @@ Author: AC Demidont, DO
 Nyx Dynamics LLC
 """
 
+import argparse
+import os
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -25,6 +27,11 @@ from scipy import stats
 from itertools import combinations
 import warnings
 warnings.filterwarnings('ignore')
+
+# Default deterministic seed for all stochastic outputs (Sobol/Saltelli
+# sampling + bootstrap, Morris trajectories, SNR noise injection, bootstrap
+# CIs). Overridable via --seed on the CLI.
+DEFAULT_SEED = 42
 
 
 # =============================================================================
@@ -187,10 +194,12 @@ class SobolSensitivityAnalysis:
     S_Ti = 1 - V[E(Y|X_~i)] / V(Y)  [Total-order index]
     """
 
-    def __init__(self, model: BarrierModel, n_samples: int = 10000):
+    def __init__(self, model: BarrierModel, n_samples: int = 10000,
+                 rng: np.random.Generator = None):
         self.model = model
         self.n_samples = n_samples
         self.baseline = model.barrier_probs.copy()
+        self.rng = rng if rng is not None else np.random.default_rng(DEFAULT_SEED)
 
     def generate_samples(self, bounds_factor: float = 0.3) -> Tuple[np.ndarray, np.ndarray]:
         """
@@ -205,8 +214,8 @@ class SobolSensitivityAnalysis:
         upper = np.minimum(0.95, self.baseline * (1 + bounds_factor))
 
         # Generate two independent sample matrices
-        A = np.random.uniform(size=(self.n_samples, n))
-        B = np.random.uniform(size=(self.n_samples, n))
+        A = self.rng.uniform(size=(self.n_samples, n))
+        B = self.rng.uniform(size=(self.n_samples, n))
 
         # Scale to parameter bounds
         A = lower + A * (upper - lower)
@@ -267,7 +276,7 @@ class SobolSensitivityAnalysis:
         ST_boot = np.zeros((n_bootstrap, n))
 
         for b in range(n_bootstrap):
-            idx = np.random.choice(self.n_samples, self.n_samples, replace=True)
+            idx = self.rng.choice(self.n_samples, self.n_samples, replace=True)
             Y_A_b = Y_A[idx]
             Y_B_b = Y_B[idx]
             V_Y_b = np.var(np.concatenate([Y_A_b, Y_B_b]))
@@ -309,10 +318,12 @@ class MorrisScreening:
     - Nonlinear or interaction effects
     """
 
-    def __init__(self, model: BarrierModel, n_trajectories: int = 50):
+    def __init__(self, model: BarrierModel, n_trajectories: int = 50,
+                 rng: np.random.Generator = None):
         self.model = model
         self.n_trajectories = n_trajectories
         self.baseline = model.barrier_probs.copy()
+        self.rng = rng if rng is not None else np.random.default_rng(DEFAULT_SEED)
 
     def generate_trajectory(self, levels: int = 4, bounds_factor: float = 0.3) -> np.ndarray:
         """Generate a single Morris trajectory through parameter space."""
@@ -323,17 +334,17 @@ class MorrisScreening:
         upper = np.minimum(0.95, self.baseline * (1 + bounds_factor))
 
         # Random starting point
-        x = np.random.randint(0, levels, n) / (levels - 1)
+        x = self.rng.integers(0, levels, n) / (levels - 1)
         x = lower + x * (upper - lower)
 
         # Generate trajectory by perturbing one dimension at a time
         trajectory = [x.copy()]
         delta = (upper - lower) / (levels - 1)
 
-        order = np.random.permutation(n)
+        order = self.rng.permutation(n)
         for i in order:
             x_new = x.copy()
-            if np.random.random() < 0.5:
+            if self.rng.random() < 0.5:
                 x_new[i] = min(upper[i], x[i] + delta[i])
             else:
                 x_new[i] = max(lower[i], x[i] - delta[i])
@@ -413,10 +424,12 @@ class SNRAnalysis:
     - Stochastic variation
     """
 
-    def __init__(self, model: BarrierModel, n_simulations: int = 1000):
+    def __init__(self, model: BarrierModel, n_simulations: int = 1000,
+                 rng: np.random.Generator = None):
         self.model = model
         self.n_simulations = n_simulations
         self.baseline = model.barrier_probs.copy()
+        self.rng = rng if rng is not None else np.random.default_rng(DEFAULT_SEED)
 
     def noise_injection_analysis(self,
                                   noise_levels: np.ndarray = None) -> pd.DataFrame:
@@ -436,7 +449,7 @@ class SNRAnalysis:
 
             for _ in range(self.n_simulations):
                 # Add multiplicative Gaussian noise
-                noisy_probs = self.baseline * (1 + np.random.normal(0, noise_std, self.model.n_barriers))
+                noisy_probs = self.baseline * (1 + self.rng.normal(0, noise_std, self.model.n_barriers))
                 noisy_probs = np.clip(noisy_probs, 0.01, 0.99)
 
                 output = self.model.calculate_success(noisy_probs)
@@ -481,7 +494,7 @@ class SNRAnalysis:
 
         for _ in range(n_bootstrap):
             # Sample parameters with 10% uncertainty
-            noisy_probs = self.baseline * (1 + np.random.normal(0, 0.10, self.model.n_barriers))
+            noisy_probs = self.baseline * (1 + self.rng.normal(0, 0.10, self.model.n_barriers))
             noisy_probs = np.clip(noisy_probs, 0.01, 0.99)
 
             noisy_model = BarrierModel(noisy_probs)
@@ -559,10 +572,12 @@ class BootstrapValidation:
     Bootstrap-based validation and confidence interval estimation.
     """
 
-    def __init__(self, model: BarrierModel, n_bootstrap: int = 2000):
+    def __init__(self, model: BarrierModel, n_bootstrap: int = 2000,
+                 rng: np.random.Generator = None):
         self.model = model
         self.n_bootstrap = n_bootstrap
         self.baseline = model.barrier_probs.copy()
+        self.rng = rng if rng is not None else np.random.default_rng(DEFAULT_SEED)
 
     def bootstrap_success_probability(self) -> Dict:
         """Bootstrap CI for baseline success probability."""
@@ -570,7 +585,7 @@ class BootstrapValidation:
 
         for _ in range(self.n_bootstrap):
             # Resample with uncertainty
-            boot_probs = self.baseline * (1 + np.random.normal(0, 0.05, self.model.n_barriers))
+            boot_probs = self.baseline * (1 + self.rng.normal(0, 0.05, self.model.n_barriers))
             boot_probs = np.clip(boot_probs, 0.01, 0.99)
             outputs.append(BarrierModel(boot_probs).calculate_success())
 
@@ -594,7 +609,7 @@ class BootstrapValidation:
             effects = []
 
             for _ in range(self.n_bootstrap):
-                boot_probs = self.baseline * (1 + np.random.normal(0, 0.05, self.model.n_barriers))
+                boot_probs = self.baseline * (1 + self.rng.normal(0, 0.05, self.model.n_barriers))
                 boot_probs = np.clip(boot_probs, 0.01, 0.99)
 
                 boot_model = BarrierModel(boot_probs)
@@ -623,7 +638,7 @@ class BootstrapValidation:
 def plot_sensitivity_analysis(oat_results: pd.DataFrame,
                               sobol_results: pd.DataFrame,
                               morris_results: pd.DataFrame,
-                              save_path: str = None):
+                              save_path: str = None, dpi: int = 300):
     """Create comprehensive sensitivity analysis figure."""
     fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 
@@ -701,7 +716,7 @@ def plot_sensitivity_analysis(oat_results: pd.DataFrame,
     plt.tight_layout()
 
     if save_path:
-        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        plt.savefig(save_path, dpi=dpi, bbox_inches='tight')
         print(f"Saved to {save_path}")
 
     return fig
@@ -709,7 +724,7 @@ def plot_sensitivity_analysis(oat_results: pd.DataFrame,
 
 def plot_snr_analysis(snr_results: pd.DataFrame,
                       robustness_results: Dict,
-                      save_path: str = None):
+                      save_path: str = None, dpi: int = 300):
     """Create SNR and robustness analysis figure."""
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 
@@ -785,7 +800,7 @@ def plot_snr_analysis(snr_results: pd.DataFrame,
     plt.tight_layout()
 
     if save_path:
-        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        plt.savefig(save_path, dpi=dpi, bbox_inches='tight')
         print(f"Saved to {save_path}")
 
     return fig
@@ -795,11 +810,36 @@ def plot_snr_analysis(snr_results: pd.DataFrame,
 # MAIN EXECUTION
 # =============================================================================
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Sensitivity analysis (OAT/Sobol/Morris/SNR/bootstrap), seeded."
+    )
+    parser.add_argument('--seed', type=int, default=DEFAULT_SEED,
+                        help=f'Random seed for all stochastic outputs (default {DEFAULT_SEED}).')
+    parser.add_argument('--outdir', type=str, default='.',
+                        help='Directory for figures and CSV outputs (default current dir).')
+    parser.add_argument('--fig-format', type=str, default='png',
+                        help='Figure format extension (default png).')
+    parser.add_argument('--dpi', type=int, default=300,
+                        help='Figure resolution in DPI (default 300).')
+    return parser.parse_args()
+
+
 def main():
     """Run comprehensive sensitivity and robustness analysis."""
+    args = parse_args()
+    outdir = args.outdir
+    os.makedirs(outdir, exist_ok=True)
+    ext = args.fig_format.lower()
+    if ext == 'tif':
+        ext = 'tiff'
+    # Single deterministic generator threaded through every stochastic step.
+    rng = np.random.default_rng(args.seed)
+
     print("=" * 80)
     print("SENSITIVITY ANALYSIS AND MODEL VALIDATION")
     print("Algorithmic Bias Epidemiology Framework")
+    print(f"seed={args.seed}  outdir={outdir}")
     print("=" * 80)
 
     # Initialize model
@@ -828,7 +868,7 @@ def main():
     print("2. SOBOL GLOBAL SENSITIVITY ANALYSIS")
     print("-" * 40)
 
-    sobol = SobolSensitivityAnalysis(model, n_samples=5000)
+    sobol = SobolSensitivityAnalysis(model, n_samples=5000, rng=rng)
     sobol_results = sobol.calculate_indices()
 
     print("\nSobol Indices (with 95% CI):")
@@ -844,7 +884,7 @@ def main():
     print("3. MORRIS ELEMENTARY EFFECTS SCREENING")
     print("-" * 40)
 
-    morris = MorrisScreening(model, n_trajectories=100)
+    morris = MorrisScreening(model, n_trajectories=100, rng=rng)
     morris_results = morris.calculate_elementary_effects()
 
     print("\nMorris Statistics:")
@@ -859,7 +899,7 @@ def main():
     print("4. SIGNAL-TO-NOISE RATIO ANALYSIS")
     print("-" * 40)
 
-    snr = SNRAnalysis(model, n_simulations=2000)
+    snr = SNRAnalysis(model, n_simulations=2000, rng=rng)
     snr_results = snr.noise_injection_analysis()
 
     print("\nSNR at Different Noise Levels:")
@@ -899,7 +939,7 @@ def main():
     print("6. BOOTSTRAP CONFIDENCE INTERVALS")
     print("-" * 40)
 
-    bootstrap = BootstrapValidation(model, n_bootstrap=2000)
+    bootstrap = BootstrapValidation(model, n_bootstrap=2000, rng=rng)
     boot_success = bootstrap.bootstrap_success_probability()
 
     print("\nBaseline Success Probability:")
@@ -915,8 +955,9 @@ def main():
     print("-" * 40)
 
     plot_sensitivity_analysis(oat_results, sobol_results, morris_results,
-                             'sensitivity_analysis.png')
-    plot_snr_analysis(snr_results, robustness, 'snr_robustness.png')
+                             f'{outdir}/sensitivity_analysis.{ext}', dpi=args.dpi)
+    plot_snr_analysis(snr_results, robustness, f'{outdir}/snr_robustness.{ext}',
+                      dpi=args.dpi)
 
     # ==========================================================================
     # Export Results
@@ -925,11 +966,11 @@ def main():
     print("EXPORTING RESULTS")
     print("-" * 40)
 
-    oat_results.to_csv('oat_sensitivity.csv', index=False)
-    oat_indices.to_csv('oat_indices.csv', index=False)
-    sobol_results.to_csv('sobol_indices.csv', index=False)
-    morris_results.to_csv('morris_screening.csv', index=False)
-    snr_results.to_csv('snr_analysis.csv', index=False)
+    oat_results.to_csv(f'{outdir}/oat_sensitivity.csv', index=False)
+    oat_indices.to_csv(f'{outdir}/oat_indices.csv', index=False)
+    sobol_results.to_csv(f'{outdir}/sobol_indices.csv', index=False)
+    morris_results.to_csv(f'{outdir}/morris_screening.csv', index=False)
+    snr_results.to_csv(f'{outdir}/snr_analysis.csv', index=False)
 
     # Robustness summary
     robustness_df = pd.DataFrame([
@@ -937,7 +978,7 @@ def main():
         {'finding': 'max_individual_effect', **robustness['max_individual_effect']},
         {'finding': 'barriers_for_90pct', **robustness['barriers_for_90pct']}
     ])
-    robustness_df.to_csv('robustness_summary.csv', index=False)
+    robustness_df.to_csv(f'{outdir}/robustness_summary.csv', index=False)
 
     print("\nFiles exported:")
     print("  - sensitivity_analysis.png")

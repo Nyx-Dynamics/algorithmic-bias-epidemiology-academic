@@ -1,189 +1,180 @@
-# Algorithmic Bias as Epidemiological Phenomenon
+# Synergistic Barriers to Algorithmic Recourse in Healthcare and Administrative Systems
 
-**A Mathematical Framework for Understanding Algorithmic Discrimination Through the Lens of Infectious Disease Dynamics**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
-[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+**A Quantitative Interaction-Dominant Model**
 
-## Abstract
+## Overview
 
-We present a formal mathematical framework demonstrating that algorithmic discrimination exhibits epidemiological dynamics isomorphic to viral infection. Using the HIV integration paradigm as our primary model, we prove that: (1) algorithmic scoring functions are primitive recursive and thus exhibit predictable, bounded behavior; (2) feedback loops in scoring systems create self-reinforcing degradation trajectories; (3) data integration across systems creates irreversible harm analogous to proviral integration; and (4) barrier systems exhibit strong synergistic interaction (94.7% three-way effect), explaining the failure of piecemeal reform efforts.
+Algorithmic decision systems mediate access to healthcare, credit, employment and housing, yet individuals who experience adverse decisions face multi-stage barriers when seeking recourse. We formalize these barriers as a series-structured system with 11 empirically parameterized stages across three layers (data integration, data accuracy and institutional access) and prove that single-barrier interventions are bounded by baseline system success.
 
-We develop the **Life Success Prevention Theorem**, which states that for any exposure *e* > 0 to algorithmic bias, the steady-state life success score *S*∞ < *S*₀, representing permanent penalty. The only path to *S*∞ = *S*₀ requires intervention before data integration—precisely paralleling HIV prevention dynamics. Population Attributable Fraction (PAF) analysis reveals that 16.7-73.6% of adverse outcomes in affected populations are directly attributable to algorithmic factors, with justice-involved individuals showing the highest attributable fraction.
+> **Manuscript status:** Under revision at *PLOS Digital Health* (PDIG-D-26-00342). Preprint on medRxiv (doi:10.64898/2026.02.22.26346836).
 
-**Keywords:** algorithmic discrimination, computational epidemiology, feedback dynamics, primitive recursive functions, barrier analysis, health disparities
+### Key Findings
 
----
+- **Baseline success probability:** 0.0018% — fewer than 2 in 100,000 individuals successfully navigate all barriers
+- **Individual barrier removal:** All effects <0.02% — single-target interventions are structurally futile
+- **Three-way interaction dominance:** 87.6% of total effect variance — barriers operate as a synergistic system
+- **Strategy equivalence:** ANOVA F=0.07, p=0.98 — removal ordering is irrelevant; only completeness matters
+- **Robustness:** SNR positive up to 25% parameter noise; 100% bootstrap robustness (n=1,000) for all principal findings
 
 ## Repository Structure
 
 ```
 algorithmic-bias-epidemiology-academic/
-├── manuscript/
-│   ├── main.tex                    # LaTeX manuscript
-│   ├── figures/                    # Publication-quality figures
-│   ├── tables/                     # Data tables
-│   └── supplementary/              # Extended methods, proofs
 ├── analysis/
-│   ├── life_success_theorem.py     # Core mathematical model
-│   ├── barrier_analysis.py         # Counterfactual analysis
-│   ├── population_analysis.py      # PAF calculations
-│   ├── monte_carlo.py              # Simulation framework
+│   ├── barrier_visualization.py         # Counterfactual analysis & figure generation
+│   ├── sensitivity_analysis.py          # Sobol, Morris, OAT, bootstrap, SNR
+│   ├── barrier_analysis.py              # Exploratory model (deprecated)
+│   ├── population_analysis.py           # Population attributable fraction analysis
 │   └── requirements.txt
 ├── data/
-│   ├── simulation_results/         # Output from analyses
-│   └── processed/                  # Processed datasets
+│   ├── processed/                       # Output CSVs from analyses
+│   │   ├── barrier_definitions.csv
+│   │   ├── individual_barrier_effects.csv
+│   │   ├── interaction_effects.csv
+│   │   ├── shapley_values.csv
+│   │   ├── sobol_indices.csv
+│   │   ├── snr_analysis.csv
+│   │   └── stepwise_*.csv
+│   ├── parameter_sources/
+│   │   └── parameter_derivation.md      # Full derivation logic for all parameters
+│   └── literature_review/
+├── manuscript/
+│   ├── medrXiv_manuscript_final.tex     # medRxiv submission manuscript
+│   ├── medrXiv_supplement_final.tex     # Supplementary information
+│   ├── figures/                         # Publication-quality figures (Figs 1–5, S1–S2)
+│   └── FIGURE_CAPTIONS.md
 ├── reproducibility/
-│   ├── run_all.sh                  # Master script
-│   ├── environment.yml             # Conda environment
-│   └── docker/                     # Container build files
+│   ├── environment.yml
+│   └── run_all.sh
+├── CITATION.cff
+├── LICENSE
 └── README.md
 ```
 
-## Core Theorems
+## Mathematical Framework
 
-### Theorem 1: Algorithmic Scoring Functions are Primitive Recursive
+### Series-Structured Barrier Model
 
-All commercial scoring systems (FICO, employment screening, insurance underwriting) are constructed from:
-- Zero function Z(n) = 0
-- Successor function S(n) = n + 1
-- Projection functions P^k_i
-- Composition and primitive recursion
+Under the multiplicative barrier model, the probability of successful cascade completion is:
 
-**Implication:** These functions always terminate and produce deterministic outputs. The output is completely determined by the input—there is no randomness or external agency.
+```
+P(success) = ∏(i=1 to 11) p_i
+```
 
-### Theorem 2: Feedback Loops are Mathematically Inevitable
+**Proposition 1** (Single-barrier improvement bound): Removing barrier *j* yields Δ_j = P · (1/p_j − 1). Absolute improvement is linear in baseline success P — an algebraic property of series systems, not a simulation finding.
 
-For a scoring function f: State → Score where low scores increase rejection probability:
+**Proposition 2** (Interaction dominance on the probability scale): On the probability scale, multiplicative stacking produces threshold behavior and interaction dominance. On the log scale, barriers contribute additively — but policy outcomes and equity metrics are evaluated on the probability scale.
 
-Let {s_n} be the score sequence where s_{n+1} = f(state_n, rejection_n)
+### Three-Layer Framework
 
-If rejection_n = 1 when s_n < threshold, then:
-- {s_n} is monotonically decreasing
-- {s_n} is bounded below by 0
-- ∴ lim_{n→∞} s_n exists and creates an absorbing state
+| Layer | Barriers | Domain |
+|-------|----------|--------|
+| L1: Data Integration | Rapid data transmission, multi-system integration, permanent storage | Speed and breadth of adverse data propagation |
+| L2: Data Accuracy | Error detection, correction process, incomplete correction propagation | Detecting and correcting erroneous data |
+| L3: Institutional | Awareness gap, record access, legal knowledge, legal resources, systemic bias | Awareness, access, legal knowledge and algorithmic bias |
 
-### Theorem 3: Data Integration Creates Irreversibility
+### Empirical Parameter Traceability
 
-For k independent systems each with correction probability p:
+All 11 barrier pass probabilities are derived from publicly available federal datasets and peer-reviewed studies:
 
-P(complete_correction) = p^k
+| Source | Barriers Informed |
+|--------|-------------------|
+| CFPB Consumer Response Reports (2022) | Data Integration (L1), Data Accuracy (L2) |
+| FTC Section 319 Reports (2013, 2015) | Data Accuracy (L2), Data Integration (L1) |
+| Legal Services Corporation Justice Gap (2022) | Institutional (L3): Awareness, Legal Knowledge, Legal Resources |
+| Obermeyer et al. *Science* (2019) | Institutional (L3): Systemic Bias in Algorithms |
 
-For p = 0.75, k = 20 systems:
-P(correction) = 0.75^20 ≈ 0.003 (0.3%)
-
-After integration across systems, Opportunity < 100% **forever**.
-
-### Theorem 4: Barrier Systems Exhibit Synergistic Interaction
-
-For the 11-barrier multiplicative model:
-- Individual barrier effects: ~0%
-- Pairwise interactions: 0.2-7.6%
-- **Three-way interaction: 94.7%**
-
-This synergy explains why piecemeal reform consistently fails.
-
----
-
-## The Master Equation
-
-The coupled system of life success domains follows:
-
-$$\frac{dS_i}{dt} = -\alpha_i \cdot e \cdot S_i + \beta_i \cdot (S_{i0} - S_i) + \sum_j A_{ij} \cdot (S_j - S_{j0})$$
-
-Where:
-- S_i = Life success in domain i (employment, financial, housing, etc.)
-- α_i = Domain susceptibility to algorithmic bias
-- e = Exposure level (0 ≤ e ≤ 1)
-- β_i = Natural recovery rate
-- A_ij = Cross-domain coupling matrix
-
-**Closed-form solution:**
-
-$$S(t) = e^{Mt} \cdot S_0 + M^{-1} \cdot [e^{Mt} - I] \cdot b$$
-
-**Steady state:**
-
-$$S_\infty = -M^{-1} \cdot b$$
-
-**Key result:** For any e > 0, S_∞ < S_0 (permanent penalty guaranteed).
-
----
-
-## Population Attributable Fraction Analysis
-
-| Population | Prevalence (P_exposed) | Relative Risk (RR) | PAF |
-|------------|----------------------|-------------------|-----|
-| General Population | 0.40 | 1.5 | 16.7% |
-| PWID (People Who Inject Drugs) | 0.85 | 3.2 | 65.2% |
-| PWH (People With HIV) | 0.70 | 2.4 | 49.5% |
-| Justice-Involved | 0.90 | 4.1 | **73.6%** |
-
-These PAF values indicate the proportion of adverse outcomes that would be eliminated if algorithmic discrimination were removed.
-
----
+Full derivation logic: `data/parameter_sources/parameter_derivation.md`
 
 ## Reproducibility
 
-### Quick Start
-
 ```bash
-# Clone repository
 git clone https://github.com/Nyx-Dynamics/algorithmic-bias-epidemiology-academic.git
 cd algorithmic-bias-epidemiology-academic
 
-# Create environment
-conda env create -f reproducibility/environment.yml
-conda activate algo-epi
+pip install numpy scipy matplotlib pandas SALib
 
-# Run all analyses
-bash reproducibility/run_all.sh
+# Counterfactual analysis and figures 1–3, S1–S2
+python analysis/barrier_visualization.py
+
+# Sensitivity analysis and figures 4–5
+python analysis/sensitivity_analysis.py
 ```
 
-### Docker
+**Environment:** Python 3.10+, NumPy, SciPy, Matplotlib, SALib
+**Random seed:** 42 (fixed for reproducibility)
 
-```bash
-docker build -t algo-epi reproducibility/docker/
-docker run -v $(pwd)/output:/app/output algo-epi
-```
+### Dependencies
 
----
+- Python ≥ 3.10
+- NumPy ≥ 1.21
+- SciPy ≥ 1.7
+- Matplotlib ≥ 3.5
+- SALib ≥ 1.4
+- Pandas ≥ 1.3
 
-## Target Venues
+## Preprint & Submission
 
-- **Nature Machine Intelligence** - Algorithmic accountability framework
-- **Science / Science Advances** - Policy implications of mathematical findings
-- **ACM FAccT** - Fairness, Accountability, Transparency in ML
-- **American Journal of Epidemiology** - Surveillance methodology
-- **JAMA / Health Affairs** - Health disparities focus
-
----
+- **medRxiv preprint:** doi:10.64898/2026.02.22.26346836
+- **Journal:** *PLOS Digital Health* (PDIG-D-26-00342, under revision)
 
 ## Citation
 
+### Paper
+
 ```bibtex
-@article{demidont2026algorithmic,
-  title={Algorithmic Bias as Epidemiological Phenomenon:
-         A Mathematical Framework for Understanding Discrimination Dynamics},
-  author={Demidont, AC},
-  journal={[Target Journal]},
+@article{demidont2026synergistic,
+  title={Synergistic barriers to algorithmic recourse in healthcare 
+         and administrative systems},
+  author={Demidont, A.C.},
+  journal={medRxiv},
   year={2026},
-  publisher={Nyx Dynamics LLC}
+  doi={10.64898/2026.02.22.26346836},
+  note={Under revision at PLOS Digital Health}
 }
 ```
 
----
+### Software
+
+```bibtex
+@software{demidont2026algorithmic_code,
+  author = {Demidont, A.C.},
+  title = {algorithmic-bias-epidemiology-academic: Synergistic Barrier 
+           Model for Algorithmic Recourse},
+  year = {2026},
+  publisher = {Zenodo},
+  version = {v1.1.0},
+  doi = {10.5281/zenodo.18746745},
+  url = {https://doi.org/10.5281/zenodo.18746745}
+}
+```
+
+## Related Work
+
+- **Prevention Theorem**: [Nyx-Dynamics/Prevention-Theorem](https://github.com/Nyx-Dynamics/Prevention-Theorem)
+- **PWID Structural Barriers**: [Nyx-Dynamics/HIV_Prevention_PWID](https://github.com/Nyx-Dynamics/HIV_Prevention_PWID)
+- **LAI-PrEP Bridge Tool**: [Nyx-Dynamics/lai-prep-bridge-tool-pub](https://github.com/Nyx-Dynamics/lai-prep-bridge-tool-pub)
+- **Noise Decorrelation in HIV**: [Nyx-Dynamics/noise_decorrelation_hiv](https://github.com/Nyx-Dynamics/noise_decorrelation_hiv)
+- **Bridging the Gap — PrEP Cascade**: [Nyx-Dynamics/bridging_the_gap](https://github.com/Nyx-Dynamics/bridging_the_gap)
+
+## Interactive Summary
+
+Explore the full framework — narrated slide deck, infographic, and mind map:
+[nyxdynamics.org/research/algorithmic-discrimination](https://nyxdynamics.org/research/algorithmic-discrimination/)
 
 ## License
 
-This work is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+Code in this repository is released under the [MIT License](LICENSE). The associated manuscript and data are made available under CC BY 4.0 in accordance with PLOS policy.
 
 ## Author
 
-**AC Demidont, DO**
-Nyx Dynamics LLC
-acdemidont@nyxdynamics.org
+**A.C. Demidont, DO**
+Nyx Dynamics, LLC
+Email: acdemidont@nyxdynamics.org
+ORCID: [0000-0002-9216-8569](https://orcid.org/0000-0002-9216-8569)
 
 ---
 
-*Generated: January 8, 2026*
+*This research was conducted independently. The author reports prior employment with Gilead Sciences, Inc. (2020–2024); Gilead had no role in this research.*

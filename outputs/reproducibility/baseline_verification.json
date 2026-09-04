@@ -1,0 +1,61 @@
+{
+  "seed": 42,
+  "all_pass": true,
+  "values": {
+    "baseline_success": 1.8009337500000003e-05,
+    "baseline_pct": 0.0018009337500000003,
+    "max_single_barrier_gain_pct": 0.005402801250000001,
+    "max_single_barrier_name": "Legal Knowledge Gap",
+    "three_way_interaction_share_pct": 87.60303281625
+  },
+  "checks": [
+    {
+      "check": "baseline_success_exact",
+      "pass": true,
+      "got": 1.8009337500000003e-05,
+      "expected": 1.8009337500000003e-05
+    },
+    {
+      "check": "baseline_pct_0.0018",
+      "pass": true,
+      "got": 0.0018,
+      "expected": 0.0018
+    },
+    {
+      "check": "max_single_barrier_gain_0.0054",
+      "pass": true,
+      "got": 0.0054,
+      "expected": 0.0054
+    },
+    {
+      "check": "max_gain_barrier_is_legal_knowledge",
+      "pass": true,
+      "got": "Legal Knowledge Gap",
+      "expected": "Legal Knowledge Gap"
+    },
+    {
+      "check": "three_way_share_87.6",
+      "pass": true,
+      "got": 87.6,
+      "expected": 87.6
+    },
+    {
+      "check": "output_exists:data/processed/shapley_values.csv",
+      "pass": true,
+      "got": true,
+      "expected": true
+    },
+    {
+      "check": "output_exists:data/processed/interaction_effects.csv",
+      "pass": true,
+      "got": true,
+      "expected": true
+    },
+    {
+      "check": "output_exists:data/processed/individual_barrier_effects.csv",
+      "pass": true,
+      "got": true,
+      "expected": true
+    }
+  ]
+}
