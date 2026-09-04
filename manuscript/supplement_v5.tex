@@ -14,6 +14,7 @@
 \usepackage[right]{lineno}
 \usepackage{xurl}
 \usepackage{graphicx}
+\graphicspath{{figures/}{../manuscript/figures/}}
 \usepackage{silence}
 \WarningFilter{latex}{Command \showhyphens has changed}
 \usepackage[nopatch=eqnum]{microtype}
@@ -101,7 +102,24 @@ Systemic Bias in Algorithms (L3) & Healthcare audit & Cost-for-need proxy bias; 
 % ============================================================
 \section*{S2 Table. Individual barrier removal effects}
 \addcontentsline{toc}{section}{S2 Table. Individual barrier removal effects}
-Baseline $P=0.0018\%$; $\Delta$ = marginal effect of removing each barrier; 95\% CI from seeded bootstrap ($n=1{,}000$). All $\Delta<0.02\%$ (Proposition~1). Maximum: Legal Knowledge Gap, $\Delta=0.0054\%$. [SEED: confirm CIs from seeded run.]
+\begin{table}[!ht]\centering
+\caption{{\bf Individual barrier removal effects.} Baseline $P=0.0018\%$; $\Delta$ = marginal effect of removing each barrier (deterministic; $\Delta_j=P(1/p_j-1)$, Proposition~1). All $\Delta<0.02\%$; the maximum is Legal Knowledge Gap ($\Delta=0.0054\%$). Bootstrap 95\% CIs ($n=1{,}000$, seed 42) are provided in the repository (\texttt{individual\_barrier\_effects.csv}).}
+\label{S2}
+\begin{tabular}{l l c c}
+\hline \textbf{Barrier} & \textbf{Layer} & \textbf{$P$ after removal (\%)} & \textbf{$\Delta$ (\%)} \\ \thickhline
+Rapid Data Transmission & Data Integration & 0.0060 & 0.0042 \\
+Multi-System Integration & Data Integration & 0.0033 & 0.0015 \\
+Permanent Storage & Data Integration & 0.0040 & 0.0022 \\ \hline
+Error Detection Difficulty & Data Accuracy & 0.0051 & 0.0033 \\
+Correction Process Barriers & Data Accuracy & 0.0051 & 0.0033 \\
+Incomplete Correction Propagation & Data Accuracy & 0.0045 & 0.0027 \\ \hline
+Awareness Gap & Institutional & 0.0060 & 0.0042 \\
+Record Access Barriers & Institutional & 0.0033 & 0.0015 \\
+Legal Knowledge Gap & Institutional & 0.0072 & 0.0054 \\
+Legal Resource Barriers & Institutional & 0.0045 & 0.0027 \\
+Systemic Bias in Algorithms & Institutional & 0.0060 & 0.0042 \\ \hline
+\end{tabular}
+\end{table}
 
 % ============================================================
 \section*{S3 Table. Layer interaction decomposition (corrected)}
@@ -125,12 +143,46 @@ Total & 100.0 \\ \hline
 % ============================================================
 \section*{S4 Table. Shapley value attribution}
 \addcontentsline{toc}{section}{S4 Table. Shapley value attribution}
-Seeded canonical Shapley attribution (seed 42, \%): Legal Knowledge Gap 10.95; Rapid Data Transmission 10.72; Systemic Bias in Algorithms 10.53; Incomplete Correction Propagation 10.10; Awareness Gap 9.67; Error Detection Difficulty 9.53; Correction Process Barriers 9.21; Legal Resource Barriers 8.50; Permanent Storage 7.79; Record Access Barriers 6.79; Multi-System Integration 6.21. Contributions are comparatively even (no barrier $>$11\%) and span all three layers, consistent with interaction-driven structure.
+\begin{table}[!ht]\centering
+\caption{{\bf Shapley value attribution (seeded, seed 42).} Fair allocation of achievable improvement across barriers, accounting for all removal orderings. Contributions are comparatively even (no barrier $>$11\%) and span all three layers, consistent with interaction-driven structure.}
+\label{S4}
+\begin{tabular}{c l l c}
+\hline \textbf{Rank} & \textbf{Barrier} & \textbf{Layer} & \textbf{Shapley (\%)} \\ \thickhline
+1 & Legal Knowledge Gap & Institutional & 10.95 \\
+2 & Rapid Data Transmission & Data Integration & 10.72 \\
+3 & Systemic Bias in Algorithms & Institutional & 10.53 \\
+4 & Incomplete Correction Propagation & Data Accuracy & 10.10 \\
+5 & Awareness Gap & Institutional & 9.67 \\
+6 & Error Detection Difficulty & Data Accuracy & 9.53 \\
+7 & Correction Process Barriers & Data Accuracy & 9.21 \\
+8 & Legal Resource Barriers & Institutional & 8.50 \\
+9 & Permanent Storage & Data Integration & 7.79 \\
+10 & Record Access Barriers & Institutional & 6.79 \\
+11 & Multi-System Integration & Data Integration & 6.21 \\ \hline
+\end{tabular}
+\end{table}
 
 % ============================================================
 \section*{S5 Table. Sobol sensitivity indices}
 \addcontentsline{toc}{section}{S5 Table. Sobol sensitivity indices}
-Seeded canonical run (seed 42): total-order ($S_T$) exceeded first-order ($S_1$) for \emph{all} barriers, but the $S_T-S_1$ gaps are small and, for several barriers, within Monte-Carlo error at the current Saltelli sample size---so the earlier phrasing ``substantially exceeded for all barriers'' is not supported. (The reviewer cited the prior unseeded values for Awareness/Legal Knowledge; under seeding the smallest gaps fall on Correction Process/Legal Resource, underscoring that these per-barrier orderings are sampling-sensitive.) Finalization option: increase $n$ to tighten the indices.
+\begin{table}[!ht]\centering
+\caption{{\bf Sobol first-order ($S_1$) and total-order ($S_T$) indices (seeded, seed 42).} $S_T$ exceeded $S_1$ for \emph{all} barriers, but the $S_T-S_1$ interaction gaps are small and, for several barriers, within Monte-Carlo error at the current Saltelli sample size---so ``substantially exceeded for all barriers'' is not supported. Under seeding the smallest gaps fall on Correction Process/Legal Resource, underscoring that per-barrier orderings are sampling-sensitive (finalization option: increase $n$).}
+\label{S5}
+\begin{tabular}{l c c c}
+\hline \textbf{Barrier} & \textbf{$S_1$} & \textbf{$S_T$} & \textbf{$S_T-S_1$} \\ \thickhline
+Rapid Data Transmission & 0.063 & 0.101 & 0.038 \\
+Multi-System Integration & 0.073 & 0.103 & 0.030 \\
+Permanent Storage & 0.059 & 0.097 & 0.038 \\
+Error Detection Difficulty & 0.069 & 0.098 & 0.029 \\
+Correction Process Barriers & 0.088 & 0.103 & 0.015 \\
+Incomplete Correction Propagation & 0.074 & 0.101 & 0.027 \\
+Awareness Gap & 0.075 & 0.100 & 0.025 \\
+Record Access Barriers & 0.075 & 0.108 & 0.033 \\
+Legal Knowledge Gap & 0.084 & 0.103 & 0.019 \\
+Legal Resource Barriers & 0.094 & 0.106 & 0.011 \\
+Systemic Bias in Algorithms & 0.065 & 0.098 & 0.034 \\ \hline
+\end{tabular}
+\end{table}
 
 % ============================================================
 \section*{S6 Table. Robustness under bounded perturbation}
@@ -150,7 +202,7 @@ Barriers needed for 90\% success & $\geq$10 of 11 & 100.0 \\ \hline
 \section*{S7 Table. Signal-to-noise and output variability}
 \addcontentsline{toc}{section}{S7 Table. Signal-to-noise and output variability}
 \begin{table}[!ht]\centering
-\caption{{\bf SNR and coefficient of variation (CV) by parameter-noise level.} Robustness is bounded: CV rises steeply above $\sim$15\% noise, reaching 73.2\% at 25\% and 93.8\% at 30\%. Robustness is therefore claimed only within bounded scenarios.}
+\caption{{\bf SNR and coefficient of variation (CV) by parameter-noise level (seeded, seed 42).} Robustness is bounded: CV rises steeply above $\sim$15\% noise, reaching 109.8\% at 25\% and 128.7\% at 30\%. Robustness is therefore claimed only within bounded scenarios.}
 \label{S7}
 \begin{tabular}{c c c c}
 \hline \textbf{Noise (\%)} & \textbf{SNR (dB)} & \textbf{Quality} & \textbf{CV (\%)} \\ \thickhline
@@ -191,11 +243,23 @@ Repeated attempts $m=3$ & 3.651\% & 25.2\% & 2.665\% & 16.88\% \\ \hline
 At $\rho=0.5$ the best single-layer intervention (4.50\%) remains far below coordinated removal (96.8\% total), so the comparative/threshold conclusion holds across the correlation sweep; under repeated attempts it attenuates, bounding the model's validity to approximately single-pass serial recourse.
 
 % ============================================================
-\section*{Figure legends}
-\addcontentsline{toc}{section}{Figure legends}
-\paragraph*{S1 Fig.} Shapley attribution across barriers (seeded); five highest contributors span all three layers.
-\paragraph*{S2 Fig.} Layer-removal effects; single-layer removal negligible; largest two-layer combination is Data Accuracy + Institutional ($\sim$7.4\%); only all-three removal reaches 100\%.
-\paragraph*{S3 Fig.} Alternative-topology robustness: baseline $P$ and three-way share vs.\ copula $\rho$, with repeated-attempt points ($m=2,3$).
+\section*{Supplementary figures}
+\addcontentsline{toc}{section}{Supplementary figures}
+
+\begin{figure}[!ht]\centering
+\includegraphics[width=0.9\linewidth]{shapley_attribution.png}
+\caption{{\bf S1 Fig. Shapley value attribution (seeded).} Fair allocation of achievable improvement across barriers, accounting for all removal orderings; the five highest contributors span all three layers, consistent with interaction-driven structure.}
+\label{S1_Fig}\end{figure}
+
+\begin{figure}[!ht]\centering
+\includegraphics[width=0.9\linewidth]{layer_effects.png}
+\caption{{\bf S2 Fig. Layer-removal effects.} Single-layer removal yields negligible improvement; the largest two-layer combination is Data Accuracy $+$ Institutional ($\sim$7.4\%); only removal across all three layers reaches 100\%.}
+\label{S2_Fig}\end{figure}
+
+\begin{figure}[!ht]\centering
+\includegraphics[width=0.9\linewidth]{FigX_copula_robustness.png}
+\caption{{\bf S3 Fig. Alternative-topology robustness (Major 4).} Baseline success $P$ and three-way interaction share vs.\ Gaussian-copula correlation $\rho$, with repeated-attempt points ($m=2,3$). The comparative conclusion is robust to correlation; the baseline value is correlation-sensitive; repeated attempts attenuate interaction dominance.}
+\label{S3_Fig}\end{figure}
 
 % ============================================================
 \section*{Code and data availability}
