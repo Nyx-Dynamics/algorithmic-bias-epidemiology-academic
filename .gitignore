@@ -10,3 +10,6 @@ __pycache__/
 *.synctex.gz
 # Make/repro build outputs (regenerate via `make`)
 build/
+
+# Local revision drafts & internal notes (do not publish)
+revision/
