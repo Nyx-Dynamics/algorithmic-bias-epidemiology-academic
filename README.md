@@ -1,22 +1,24 @@
-# Synergistic Barriers to Algorithmic Recourse in Healthcare and Administrative Systems
+# Structural limits of single-barrier reform in algorithmic recourse: a formal series-system model with implications for digital health
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**A Quantitative Interaction-Dominant Model**
+**A formal, cross-domain series-system model of algorithmic recourse**
 
 ## Overview
 
-Algorithmic decision systems mediate access to healthcare, credit, employment and housing, yet individuals who experience adverse decisions face multi-stage barriers when seeking recourse. We formalize these barriers as a series-structured system with 11 empirically parameterized stages across three layers (data integration, data accuracy and institutional access) and prove that single-barrier interventions are bounded by baseline system success.
+Algorithmic decision systems mediate access to healthcare, credit, employment and housing, and individuals who receive adverse decisions must clear multiple sequential barriers to obtain recourse. We develop a **formal series-system model** of recourse with 11 stages across three layers (data integration, data accuracy, institutional access), parameterized provisionally from cross-domain federal datasets and one healthcare audit, and analyze its structure. Numerical results below are **properties of the model**, not empirical measurements of real recourse.
 
-> **Manuscript status:** Under revision at *PLOS Digital Health* (PDIG-D-26-00342). Preprint on medRxiv (doi:10.64898/2026.02.22.26346836).
+> **Manuscript status:** Under revision at *PLOS Digital Health* (PDIG-D-26-00342). Preprint on medRxiv (doi:10.64898/2026.02.22.26346836). Archived: Zenodo (DOI:10.5281/zenodo.22312977, v2.0.0).
 
-### Key Findings
+### Key findings (model-derived unless noted)
 
-- **Baseline success probability:** 0.0018% — fewer than 2 in 100,000 individuals successfully navigate all barriers
-- **Individual barrier removal:** All effects <0.02% — single-target interventions are structurally futile
-- **Three-way interaction dominance:** 87.6% of total effect variance — barriers operate as a synergistic system
-- **Strategy equivalence:** ANOVA F=0.07, p=0.98 — removal ordering is irrelevant; only completeness matters
-- **Robustness:** SNR positive up to 25% parameter noise; 100% bootstrap robustness (n=1,000) for all principal findings
+- **Theorem (Proposition 1):** single-barrier improvement is algebraically bounded by baseline success — structural, not a simulation result.
+- **Baseline success probability:** 0.0018% (model-derived, under the calibrated parameters).
+- **Individual barrier removal:** all effects <0.02%; maximum 0.0054% (Legal Knowledge Gap).
+- **Three-way interaction share:** 87.6% of achievable improvement — a baseline-relative factorial share (not a variance decomposition); **parameterization- and topology-dependent**, not universal.
+- **Strategy comparison (descriptive):** all removal strategies converge only at near-complete removal; ordering is irrelevant to the threshold behavior.
+- **Bounded stability:** findings are stable within the prespecified ±10–33% perturbation ranges; the coefficient of variation rises to ~110% at 25% noise, so robustness is **not** claimed under arbitrary uncertainty.
+- **Alternative topologies:** the comparative conclusion (single-layer ≪ coordinated) survives moderate cross-barrier correlation (ρ≤0.5) but attenuates under repeated-attempt recourse — delimiting the model's domain of validity.
 
 ## Repository Structure
 
@@ -65,7 +67,7 @@ P(success) = ∏(i=1 to 11) p_i
 
 **Proposition 1** (Single-barrier improvement bound): Removing barrier *j* yields Δ_j = P · (1/p_j − 1). Absolute improvement is linear in baseline success P — an algebraic property of series systems, not a simulation finding.
 
-**Proposition 2** (Interaction dominance on the probability scale): On the probability scale, multiplicative stacking produces threshold behavior and interaction dominance. On the log scale, barriers contribute additively — but policy outcomes and equity metrics are evaluated on the probability scale.
+**Proposition 2** (Higher-order interaction under probability-scale multiplicativity): On the probability scale, factorial contrasts of P generate nonzero higher-order (including three-way) interaction terms, whereas on the log scale barriers contribute additively and interactions vanish. The **existence** of higher-order interaction is structural; its **magnitude** (e.g., the 87.6% three-way share) is parameterization- and topology-dependent, not a universal property.
 
 ### Three-Layer Framework
 
@@ -94,17 +96,14 @@ Full derivation logic: `data/parameter_sources/parameter_derivation.md`
 git clone https://github.com/Nyx-Dynamics/algorithmic-bias-epidemiology-academic.git
 cd algorithmic-bias-epidemiology-academic
 
-pip install numpy scipy matplotlib pandas SALib
-
-# Counterfactual analysis and figures 1–3, S1–S2
-python analysis/barrier_visualization.py
-
-# Sensitivity analysis and figures 4–5
-python analysis/sensitivity_analysis.py
+make all        # full pipeline: baseline, sensitivity, copula, systemic-bias, derivation, tables, figures, tests, verify
+make verify     # claims-vs-code checks + determinism (seed 42)
 ```
 
-**Environment:** Python 3.10+, NumPy, SciPy, Matplotlib, SALib
-**Random seed:** 42 (fixed for reproducibility)
+Individual analyses are available as targets (`make baseline`, `make copula`, `make systemic_bias_sensitivity`, `make figures`) and as scripts under `analysis/`. Sobol/Morris indices use custom Monte Carlo A/B (Saltelli/Jansen) estimators cross-checked against SALib.
+
+**Environment:** Python 3.10+, NumPy, SciPy, Matplotlib.
+**Random seed:** 42 (fixed; regression tests pin the deterministic headline values).
 
 ### Dependencies
 

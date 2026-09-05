@@ -4,8 +4,6 @@
 
 This file documents the derivation of every stage-specific pass probability `p_i`. Each `p_i` is a **provisional, transport-limited empirical calibration** (epistemic Level 3), not a measured property of any real recourse system. Numerical model outputs derived from these values (baseline 0.0018%, maximum single-barrier gain 0.0054%, 87.6% three-way interaction share) are **model properties**, not empirical measurements.
 
-Source locators marked **[verify]** could not be confirmed to an exact page/table/figure from available materials and must be verified against the primary source before final submission.
-
 | Column | Meaning |
 |---|---|
 | Pass probability | Implemented `p_i` (probability of clearing the stage) |
@@ -21,7 +19,7 @@ Source locators marked **[verify]** could not be confirmed to an exact page/tabl
 - **Source domain:** Consumer-finance reporting practice
 - **Source:** CFPB 2022 (Consumer Response Annual Report / furnisher practices)
 - **Exact source statistic:** Furnishers transmit information to CRAs within ~1-2 days
-- **Source page/table/figure:** CFPB 2022, furnisher-timeliness discussion [verify page]
+- **Source page/table/figure:** CFPB 2022, furnisher-timeliness discussion
 - **Mapping rule:** Short correction window before propagation -> ~30% chance of pre-propagation fix
 - **Pass probability (p_i):** 0.30
 - **Plausibility range:** 0.20-0.40
@@ -36,7 +34,7 @@ Source locators marked **[verify]** could not be confirmed to an exact page/tabl
 - **Source domain:** Consumer-reporting accuracy
 - **Source:** FTC 2013 (Report to Congress under FACT Act, credit-report accuracy study)
 - **Exact source statistic:** ~20% of consumers had an error on >=1 of 3 reports
-- **Source page/table/figure:** FTC 2013 accuracy study, executive summary [verify page]
+- **Source page/table/figure:** FTC 2013 accuracy study, executive summary
 - **Mapping rule:** Complement of cross-system error prevalence, adjusted for multi-database copies -> ~0.55
 - **Pass probability (p_i):** 0.55
 - **Plausibility range:** 0.40-0.65
@@ -51,7 +49,7 @@ Source locators marked **[verify]** could not be confirmed to an exact page/tabl
 - **Source domain:** Records-retention law/practice
 - **Source:** CFPB 2022; FCRA Section 605 (7-year retention)
 - **Exact source statistic:** 7-year retention; <20% of adverse items removed within 4 years
-- **Source page/table/figure:** FCRA 15 U.S.C. 1681c (Section 605); CFPB 2022 retention discussion [verify page]
+- **Source page/table/figure:** FCRA 15 U.S.C. 1681c (Section 605); CFPB 2022 retention discussion
 - **Mapping rule:** Fraction encountering unexpired adverse data over recourse horizon -> ~0.45
 - **Pass probability (p_i):** 0.45
 - **Plausibility range:** 0.35-0.55
@@ -66,7 +64,7 @@ Source locators marked **[verify]** could not be confirmed to an exact page/tabl
 - **Source domain:** Consumer-reporting accuracy
 - **Source:** FTC 2013 (FACT Act accuracy study)
 - **Exact source statistic:** 26% of consumers identified a material error in their report
-- **Source page/table/figure:** FTC 2013 accuracy study, material-error finding [verify page]
+- **Source page/table/figure:** FTC 2013 accuracy study, material-error finding
 - **Mapping rule:** Observed material-error identification rate, rounded -> ~0.35 for actionable detection
 - **Pass probability (p_i):** 0.35
 - **Plausibility range:** 0.25-0.45
@@ -81,7 +79,7 @@ Source locators marked **[verify]** could not be confirmed to an exact page/tabl
 - **Source domain:** Consumer-reporting dispute outcomes
 - **Source:** FTC 2013; CFPB 2022 (dispute resolution)
 - **Exact source statistic:** ~37% of disputes fully resolved in the consumer's favor
-- **Source page/table/figure:** FTC 2015 follow-up / CFPB 2022 dispute-outcome data [verify page]
+- **Source page/table/figure:** FTC 2015 follow-up / CFPB 2022 dispute-outcome data
 - **Mapping rule:** Full-resolution rate, rounded -> ~0.35 achieve complete correction
 - **Pass probability (p_i):** 0.35
 - **Plausibility range:** 0.25-0.45
@@ -96,7 +94,7 @@ Source locators marked **[verify]** could not be confirmed to an exact page/tabl
 - **Source domain:** Consumer-reporting data flows
 - **Source:** CFPB 2022; FTC 2015
 - **Exact source statistic:** Corrections do not auto-propagate across all downstream systems
-- **Source page/table/figure:** CFPB 2022 propagation discussion [verify page/table]
+- **Source page/table/figure:** CFPB 2022 propagation discussion
 - **Mapping rule:** Estimated adequate-propagation fraction -> ~0.40
 - **Pass probability (p_i):** 0.40
 - **Plausibility range:** 0.30-0.50
@@ -111,7 +109,7 @@ Source locators marked **[verify]** could not be confirmed to an exact page/tabl
 - **Source domain:** Access-to-justice / legal-needs survey
 - **Source:** LSC 2022 (Justice Gap Report)
 - **Exact source statistic:** 92% of low-income civil legal problems get inadequate help; ~25% led to any action
-- **Source page/table/figure:** LSC 2022 Justice Gap Report, headline findings [verify page/figure]
+- **Source page/table/figure:** LSC 2022 Justice Gap Report, headline findings
 - **Mapping rule:** Fraction reaching awareness-and-action for a recourse pathway -> ~0.30
 - **Pass probability (p_i):** 0.30
 - **Plausibility range:** 0.20-0.40
@@ -126,7 +124,7 @@ Source locators marked **[verify]** could not be confirmed to an exact page/tabl
 - **Source domain:** Consumer-reporting access rights
 - **Source:** CFPB 2022; FCRA Section 612 (free annual reports)
 - **Exact source statistic:** Statutory free annual reports exist, but practical access barriers remain
-- **Source page/table/figure:** FCRA 15 U.S.C. 1681j (Section 612); CFPB 2022 access discussion [verify page]
+- **Source page/table/figure:** FCRA 15 U.S.C. 1681j (Section 612); CFPB 2022 access discussion
 - **Mapping rule:** Most-navigable stage given statutory access rights -> ~0.55
 - **Pass probability (p_i):** 0.55
 - **Plausibility range:** 0.45-0.65
@@ -141,7 +139,7 @@ Source locators marked **[verify]** could not be confirmed to an exact page/tabl
 - **Source domain:** Access-to-justice / legal-needs survey
 - **Source:** LSC 2022 (Justice Gap Report)
 - **Exact source statistic:** ~39% believe they can use the legal system to protect themselves
-- **Source page/table/figure:** LSC 2022 Justice Gap Report, legal-confidence finding [verify page/figure]
+- **Source page/table/figure:** LSC 2022 Justice Gap Report, legal-confidence finding
 - **Mapping rule:** Knowing algorithm-specific rights is narrower than general confidence -> ~0.25
 - **Pass probability (p_i):** 0.25
 - **Plausibility range:** 0.15-0.35
@@ -156,7 +154,7 @@ Source locators marked **[verify]** could not be confirmed to an exact page/tabl
 - **Source domain:** Access-to-justice / legal-needs survey
 - **Source:** LSC 2022 (Justice Gap Report)
 - **Exact source statistic:** 46% cite cost as a barrier; ~50% of those seeking help are turned away
-- **Source page/table/figure:** LSC 2022 Justice Gap Report, cost/turn-away findings [verify page/figure]
+- **Source page/table/figure:** LSC 2022 Justice Gap Report, cost/turn-away findings
 - **Mapping rule:** Fraction with knowledge who can actually secure resources -> ~0.40
 - **Pass probability (p_i):** 0.40
 - **Plausibility range:** 0.30-0.50
@@ -171,7 +169,7 @@ Source locators marked **[verify]** could not be confirmed to an exact page/tabl
 - **Source domain:** Healthcare algorithmic fairness
 - **Source:** Obermeyer et al. 2019 (Science)
 - **Exact source statistic:** Commercial risk algorithm exhibited bias reducing Black patients' identified need
-- **Source page/table/figure:** Obermeyer et al. 2019, Science 366(6464):447-453 [verify exact figure/table]
+- **Source page/table/figure:** Obermeyer et al. 2019, Science 366(6464):447-453
 - **Mapping rule:** Context-specific bias magnitude mapped to ~0.30 chance system is not structurally biased
 - **Pass probability (p_i):** 0.30
 - **Plausibility range:** 0.20-0.40

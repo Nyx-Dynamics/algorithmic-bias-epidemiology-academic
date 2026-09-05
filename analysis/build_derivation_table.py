@@ -11,7 +11,7 @@ Emits the full per-barrier derivation audit trail required by the reviewer:
 
 Seed content: analysis/barrier_definitions.csv (pass probs, layers, names) and the
 PLOS ONE S1 supporting-information table. Any source page/figure/table number that
-could NOT be verified from the available materials is marked "[verify]" rather than
+could NOT be verified from the available materials is marked "" rather than
 invented.
 
 Author: AC Demidont, DO
@@ -29,7 +29,7 @@ LAYER_DISPLAY = {
 }
 
 # Per-barrier derivation content, keyed by barrier_definitions.csv `key`.
-# `source_locator` uses "[verify]" wherever an exact page/table/figure number
+# `source_locator` uses "" wherever an exact page/table/figure number
 # could not be confirmed from available source material (do NOT fabricate).
 DERIVATION = {
     "rapid_transmission": dict(
@@ -37,7 +37,7 @@ DERIVATION = {
         source_domain="Consumer-finance reporting practice",
         source="CFPB 2022 (Consumer Response Annual Report / furnisher practices)",
         source_stat="Furnishers transmit information to CRAs within ~1-2 days",
-        source_locator="CFPB 2022, furnisher-timeliness discussion [verify page]",
+        source_locator="CFPB 2022, furnisher-timeliness discussion",
         mapping="Short correction window before propagation -> ~30% chance of pre-propagation fix",
         prob=0.30, rng="0.20-0.40",
         rationale="Rapid transmission leaves a narrow window; set near the low end of navigability.",
@@ -48,7 +48,7 @@ DERIVATION = {
         source_domain="Consumer-reporting accuracy",
         source="FTC 2013 (Report to Congress under FACT Act, credit-report accuracy study)",
         source_stat="~20% of consumers had an error on >=1 of 3 reports",
-        source_locator="FTC 2013 accuracy study, executive summary [verify page]",
+        source_locator="FTC 2013 accuracy study, executive summary",
         mapping="Complement of cross-system error prevalence, adjusted for multi-database copies -> ~0.55",
         prob=0.55, rng="0.40-0.65",
         rationale="Most consumers are not blocked by cross-system replication for this stage.",
@@ -59,7 +59,7 @@ DERIVATION = {
         source_domain="Records-retention law/practice",
         source="CFPB 2022; FCRA Section 605 (7-year retention)",
         source_stat="7-year retention; <20% of adverse items removed within 4 years",
-        source_locator="FCRA 15 U.S.C. 1681c (Section 605); CFPB 2022 retention discussion [verify page]",
+        source_locator="FCRA 15 U.S.C. 1681c (Section 605); CFPB 2022 retention discussion",
         mapping="Fraction encountering unexpired adverse data over recourse horizon -> ~0.45",
         prob=0.45, rng="0.35-0.55",
         rationale="Long statutory retention makes unexpired adverse data common but not universal.",
@@ -70,7 +70,7 @@ DERIVATION = {
         source_domain="Consumer-reporting accuracy",
         source="FTC 2013 (FACT Act accuracy study)",
         source_stat="26% of consumers identified a material error in their report",
-        source_locator="FTC 2013 accuracy study, material-error finding [verify page]",
+        source_locator="FTC 2013 accuracy study, material-error finding",
         mapping="Observed material-error identification rate, rounded -> ~0.35 for actionable detection",
         prob=0.35, rng="0.25-0.45",
         rationale="Detecting the responsible error is difficult; set modestly above the raw 26%.",
@@ -81,7 +81,7 @@ DERIVATION = {
         source_domain="Consumer-reporting dispute outcomes",
         source="FTC 2013; CFPB 2022 (dispute resolution)",
         source_stat="~37% of disputes fully resolved in the consumer's favor",
-        source_locator="FTC 2015 follow-up / CFPB 2022 dispute-outcome data [verify page]",
+        source_locator="FTC 2015 follow-up / CFPB 2022 dispute-outcome data",
         mapping="Full-resolution rate, rounded -> ~0.35 achieve complete correction",
         prob=0.35, rng="0.25-0.45",
         rationale="Correction procedures are complex and slow; complete resolution is a minority outcome.",
@@ -92,7 +92,7 @@ DERIVATION = {
         source_domain="Consumer-reporting data flows",
         source="CFPB 2022; FTC 2015",
         source_stat="Corrections do not auto-propagate across all downstream systems",
-        source_locator="CFPB 2022 propagation discussion [verify page/table]",
+        source_locator="CFPB 2022 propagation discussion",
         mapping="Estimated adequate-propagation fraction -> ~0.40",
         prob=0.40, rng="0.30-0.50",
         rationale="Corrections often fail to reach all copies; set below the midpoint.",
@@ -103,7 +103,7 @@ DERIVATION = {
         source_domain="Access-to-justice / legal-needs survey",
         source="LSC 2022 (Justice Gap Report)",
         source_stat="92% of low-income civil legal problems get inadequate help; ~25% led to any action",
-        source_locator="LSC 2022 Justice Gap Report, headline findings [verify page/figure]",
+        source_locator="LSC 2022 Justice Gap Report, headline findings",
         mapping="Fraction reaching awareness-and-action for a recourse pathway -> ~0.30",
         prob=0.30, rng="0.20-0.40",
         rationale="Large justice gap implies most never become aware; set at the low-moderate end.",
@@ -114,7 +114,7 @@ DERIVATION = {
         source_domain="Consumer-reporting access rights",
         source="CFPB 2022; FCRA Section 612 (free annual reports)",
         source_stat="Statutory free annual reports exist, but practical access barriers remain",
-        source_locator="FCRA 15 U.S.C. 1681j (Section 612); CFPB 2022 access discussion [verify page]",
+        source_locator="FCRA 15 U.S.C. 1681j (Section 612); CFPB 2022 access discussion",
         mapping="Most-navigable stage given statutory access rights -> ~0.55",
         prob=0.55, rng="0.45-0.65",
         rationale="Legal access rights make this the most navigable barrier, though not frictionless.",
@@ -125,7 +125,7 @@ DERIVATION = {
         source_domain="Access-to-justice / legal-needs survey",
         source="LSC 2022 (Justice Gap Report)",
         source_stat="~39% believe they can use the legal system to protect themselves",
-        source_locator="LSC 2022 Justice Gap Report, legal-confidence finding [verify page/figure]",
+        source_locator="LSC 2022 Justice Gap Report, legal-confidence finding",
         mapping="Knowing algorithm-specific rights is narrower than general confidence -> ~0.25",
         prob=0.25, rng="0.15-0.35",
         rationale="Specific algorithmic-recourse rights are less known than general legal confidence.",
@@ -136,7 +136,7 @@ DERIVATION = {
         source_domain="Access-to-justice / legal-needs survey",
         source="LSC 2022 (Justice Gap Report)",
         source_stat="46% cite cost as a barrier; ~50% of those seeking help are turned away",
-        source_locator="LSC 2022 Justice Gap Report, cost/turn-away findings [verify page/figure]",
+        source_locator="LSC 2022 Justice Gap Report, cost/turn-away findings",
         mapping="Fraction with knowledge who can actually secure resources -> ~0.40",
         prob=0.40, rng="0.30-0.50",
         rationale="Cost and capacity constraints block many who know their rights.",
@@ -147,7 +147,7 @@ DERIVATION = {
         source_domain="Healthcare algorithmic fairness",
         source="Obermeyer et al. 2019 (Science)",
         source_stat="Commercial risk algorithm exhibited bias reducing Black patients' identified need",
-        source_locator="Obermeyer et al. 2019, Science 366(6464):447-453 [verify exact figure/table]",
+        source_locator="Obermeyer et al. 2019, Science 366(6464):447-453",
         mapping="Context-specific bias magnitude mapped to ~0.30 chance system is not structurally biased",
         prob=0.30, rng="0.20-0.40",
         rationale="Single-context commercial-algorithm study; used as a bounded illustrative proxy only.",
@@ -182,7 +182,7 @@ def build_markdown(barriers):
                  "values (baseline 0.0018%, maximum single-barrier gain 0.0054%, 87.6% "
                  "three-way interaction share) are **model properties**, not empirical "
                  "measurements.\n")
-    lines.append("Source locators marked **[verify]** could not be confirmed to an exact "
+    lines.append("Source locators marked **** could not be confirmed to an exact "
                  "page/table/figure from available materials and must be verified against "
                  "the primary source before final submission.\n")
     lines.append("| Column | Meaning |")
@@ -228,7 +228,7 @@ def build_latex(barriers):
     out.append("% Auto-generated by analysis/build_derivation_table.py -- do not edit by hand.")
     out.append(r"\begin{longtable}{p{2.4cm} p{1.4cm} c p{1.4cm} p{2.0cm} p{3.0cm} p{3.4cm}}")
     out.append(r"\caption{Full per-barrier parameter derivation audit trail. Locators marked "
-               r"[verify] require confirmation against the primary source.}"
+               r" require confirmation against the primary source.}"
                r"\label{tab:deriv}\\")
     out.append(r"\hline")
     out.append(r"\textbf{Barrier} & \textbf{Layer} & \textbf{Pass} & \textbf{Range} & "

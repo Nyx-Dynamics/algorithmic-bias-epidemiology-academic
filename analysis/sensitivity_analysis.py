@@ -813,7 +813,7 @@ def plot_snr_analysis(snr_results: pd.DataFrame,
                f'{score:.1f}%', ha='center', fontsize=10, fontweight='bold')
 
     ax.set_ylabel('% of Resamples Supporting Finding', fontsize=10)
-    ax.set_title('C. Key Finding Robustness Under 10% Parameter-Perturbation Resampling',
+    ax.set_title('C. Threshold retention under ±10% parameter perturbation',
                 fontsize=12, fontweight='bold')
     ax.set_ylim(0, 105)
     ax.legend(loc='lower right')
