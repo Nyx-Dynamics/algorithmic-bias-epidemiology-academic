@@ -10,9 +10,9 @@ Emits the full per-barrier derivation audit trail required by the reviewer:
   - build/S_deriv_table.tex  (LaTeX longtable supplement, same content)
 
 Seed content: analysis/barrier_definitions.csv (pass probs, layers, names) and the
-PLOS ONE S1 supporting-information table. Any source page/figure/table number that
-could NOT be verified from the available materials is marked "" rather than
-invented.
+PLOS ONE S1 supporting-information table. Source locators name the specific
+discussion or finding within each source; exact page/figure/table numbers are
+given only where confirmable from the available materials, and are never invented.
 
 Author: AC Demidont, DO
 Nyx Dynamics LLC
@@ -29,8 +29,9 @@ LAYER_DISPLAY = {
 }
 
 # Per-barrier derivation content, keyed by barrier_definitions.csv `key`.
-# `source_locator` uses "" wherever an exact page/table/figure number
-# could not be confirmed from available source material (do NOT fabricate).
+# `source_locator` names the discussion or finding within the source. Where an
+# exact page/table/figure number could not be confirmed from available source
+# material it is omitted rather than fabricated (do NOT fabricate).
 DERIVATION = {
     "rapid_transmission": dict(
         construct="Probability of correcting adverse data before it propagates to CRAs",
@@ -182,9 +183,10 @@ def build_markdown(barriers):
                  "values (baseline 0.0018%, maximum single-barrier gain 0.0054%, 87.6% "
                  "three-way interaction share) are **model properties**, not empirical "
                  "measurements.\n")
-    lines.append("Source locators marked **** could not be confirmed to an exact "
-                 "page/table/figure from available materials and must be verified against "
-                 "the primary source before final submission.\n")
+    lines.append("Source locators identify the specific discussion or finding within "
+                 "each source rather than an exact page, table, or figure number; they "
+                 "were not confirmed to page-level precision against the primary "
+                 "sources.\n")
     lines.append("| Column | Meaning |")
     lines.append("|---|---|")
     lines.append("| Pass probability | Implemented `p_i` (probability of clearing the stage) |")

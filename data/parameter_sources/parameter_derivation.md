@@ -4,6 +4,8 @@
 
 This file documents the derivation of every stage-specific pass probability `p_i`. Each `p_i` is a **provisional, transport-limited empirical calibration** (epistemic Level 3), not a measured property of any real recourse system. Numerical model outputs derived from these values (baseline 0.0018%, maximum single-barrier gain 0.0054%, 87.6% three-way interaction share) are **model properties**, not empirical measurements.
 
+Source locators identify the specific discussion or finding within each source rather than an exact page, table, or figure number; they were not confirmed to page-level precision against the primary sources.
+
 | Column | Meaning |
 |---|---|
 | Pass probability | Implemented `p_i` (probability of clearing the stage) |
