@@ -22,3 +22,10 @@ data/processed/*.tiff
 
 # macOS filesystem cruft
 .DS_Store
+
+# LaTeX build artifacts (production/)
+production/*.aux
+production/*.log
+production/*.out
+production/*.toc
+production/build*.log
