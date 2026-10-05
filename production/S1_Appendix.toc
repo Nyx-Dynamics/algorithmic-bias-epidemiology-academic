@@ -1,0 +1,11 @@
+\contentsline {section}{Text A. Scope of claims}{2}{section*.2}%
+\contentsline {section}{Table A. Parameter derivation audit trail}{3}{section*.3}%
+\contentsline {section}{Table B. Individual barrier removal effects}{5}{section*.4}%
+\contentsline {section}{Table C. Layer interaction decomposition}{5}{section*.5}%
+\contentsline {section}{Table D. Shapley value attribution}{6}{section*.6}%
+\contentsline {section}{Table E. Sobol sensitivity indices}{6}{section*.7}%
+\contentsline {section}{Table F. Robustness under bounded perturbation}{6}{section*.8}%
+\contentsline {section}{Table G. Signal-to-noise and output variability}{6}{section*.9}%
+\contentsline {section}{Table H. Robustness to alternative topologies}{6}{section*.10}%
+\contentsline {section}{Supplementary figures}{7}{section*.11}%
+\contentsline {section}{Code and data availability}{7}{section*.12}%
