@@ -8,7 +8,7 @@
 
 Algorithmic decision systems mediate access to healthcare, credit, employment and housing, and individuals who receive adverse decisions must clear multiple sequential barriers to obtain recourse. We develop a **formal series-system model** of recourse with 11 stages across three layers (data integration, data accuracy, institutional access), parameterized provisionally from cross-domain federal datasets and one healthcare audit, and analyze its structure. Numerical results below are **properties of the model**, not empirical measurements of real recourse.
 
-> **Manuscript status:** Under revision at *PLOS Digital Health* (PDIG-D-26-00342). Preprint on medRxiv (doi:10.64898/2026.02.22.26346836). Archived: Zenodo (DOI:10.5281/zenodo.22312977, v2.0.0).
+> **Manuscript status:** Provisionally accepted at *PLOS Digital Health* (PDIG-D-26-00342R1), in production; article DOI [10.1371/journal.pdig.0001784](https://doi.org/10.1371/journal.pdig.0001784). Preprint on medRxiv (doi:10.64898/2026.02.22.26346836). Archived on Zenodo, concept DOI [10.5281/zenodo.18746744](https://doi.org/10.5281/zenodo.18746744), which always resolves to the latest version.
 
 ### Key findings (model-derived unless noted)
 
@@ -140,13 +140,13 @@ Individual analyses are available as targets (`make baseline`, `make copula`, `m
 ```bibtex
 @software{demidont2026algorithmic_code,
   author = {Demidont, A.C.},
-  title = {algorithmic-bias-epidemiology-academic: Synergistic Barrier 
-           Model for Algorithmic Recourse},
+  title = {algorithmic-bias-epidemiology-academic: Structural Limits of
+           Single-Barrier Reform in Algorithmic Recourse},
   year = {2026},
   publisher = {Zenodo},
-  version = {v1.1.0},
-  doi = {10.5281/zenodo.22312977},
-  url = {https://doi.org/10.5281/zenodo.22312977}
+  note = {Concept DOI; resolves to the latest version},
+  doi = {10.5281/zenodo.18746744},
+  url = {https://doi.org/10.5281/zenodo.18746744}
 }
 ```
 

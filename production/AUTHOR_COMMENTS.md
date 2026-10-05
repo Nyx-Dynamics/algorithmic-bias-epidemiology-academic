@@ -57,12 +57,24 @@ accurately. No analysis, result, or numerical value has changed; the content is 
 supplement as prepared for the revision, relabelled and with its stale internal
 cross-references corrected.
 
-**Data availability.** Please typeset the data availability statement as:
+**Data availability.** Please amend the data availability statement to read:
 
-> All data related to this manuscript are available at: <<< INSERT ZENODO DOI AND VERSION >>>
+> All data related to this manuscript are available at:
+> https://doi.org/10.5281/zenodo.18746744
 >
 > All source code for the project is available open source under MIT license at:
 > https://github.com/Nyx-Dynamics/algorithmic-bias-epidemiology-academic
+
+The DOI has changed from the one in your letter, and I would ask that the amended version
+be used. The letter quotes https://doi.org/10.5281/zenodo.22312977 (v2), which is a
+version-specific DOI: it is pinned permanently to a single deposit and does not follow the
+record forward. It is also already superseded — that deposit dates from 4 September 2026
+and was replaced the following day.
+
+The DOI above is the Zenodo concept DOI for the same record series. It always resolves to
+the most recent version, so the citation remains correct as the archive is updated and
+cannot again fall out of step with the manuscript. The archived version current at
+publication contains the supporting material described in S1 Appendix.
 
 Please let me know if anything further is required.
 
