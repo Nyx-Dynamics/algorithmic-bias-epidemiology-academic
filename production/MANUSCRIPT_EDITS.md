@@ -81,7 +81,7 @@ S1 File. Supplementary Tables S1–S7 and Supplementary Figures S1–S3: individ
 **Replace with:**
 
 ```
-S1 Appendix. Supporting tables and figures. Table A, Individual barrier removal effects; Table B, Shapley value attribution; Table C, Sobol sensitivity indices; Table D, Bootstrap robustness summary; Table E, Signal-to-noise ratio analysis; Table F, Parameter derivation audit trail (all 11 barriers); Table G, Robustness to alternative topologies (seed 42, n = 100,000); Fig A, Shapley value attribution of barrier contributions; Fig B, Effect of layer removal on system success probability; Fig C, Robustness to alternative topologies.
+S1 Appendix. Supporting tables and figures. Table A, Individual barrier removal effects; Table B, Shapley value attribution; Table C, Sobol sensitivity indices; Table D, Bootstrap robustness summary; Table E, Signal-to-noise ratio analysis; Table F, Parameter derivation audit trail (all 11 barriers); Table G, Robustness to alternative topologies: correlated barriers and repeated attempts (seed 42, n = 100,000); Fig A, Shapley value attribution of barrier contributions; Fig B, Effect of layer removal on system success probability; Fig C, Robustness to alternative topologies.
 ```
 
 Why the old text could not stand: it announced "Tables S1–S7", but S1 was a *Note* and the

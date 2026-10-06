@@ -53,6 +53,19 @@ def relabel(xml: str) -> tuple[str, list[str]]:
     xml, n_c = re.subn(r"(Table [A-G]|Fig [A-C]):", r"\1.", xml)
     log.append(f"label separators normalised to a period: {n_c}")
 
+    # Table G covers three things -- the equicorrelation copula sweep, the within-layer
+    # block variant, and the repeated-attempt rows (m = 2, 3). Its original title named
+    # only the first, which left the manuscript's citation of the repeated-attempt
+    # results pointing at a table that did not appear to contain them. Retitled so the
+    # table announces its own contents.
+    old_g = "Table G. Robustness to alternative topologies (seed 42, n = 100,000)."
+    new_g = ("Table G. Robustness to alternative topologies: correlated barriers and "
+             "repeated attempts (seed 42, n = 100,000).")
+    xml, n_g = re.subn(re.escape(old_g), new_g, xml)
+    log.append(f"Table G retitled: {n_g}")
+    if n_g != 1:
+        raise SystemExit("expected exactly one Table G title")
+
     # Document title becomes the file label.
     xml, n_ttl = re.subn(r"(<w:t[^>]*>)Supplementary Information(</w:t>)",
                          r"\1S1 Appendix\2", xml)
