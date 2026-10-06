@@ -26,8 +26,16 @@ previously showed a different one, and the corresponding author is now marked wi
 asterisk.
 
 **Author name.** Please amend the submission form to **A.C. Demidont**, which is the form
-used in the manuscript file and in the published preprint. I confirm this is the spelling
-to be indexed.
+used in the manuscript file and in the medRxiv preprint. I confirm this is the spelling to
+be indexed.
+
+I note your requirement that all authors have a first and last name. A.C. Demidont is my
+established published name, and my ORCID record (0000-0002-9216-8569), which is linked
+from the article, likewise records an initialised given name. If your indexing
+requirements cannot accommodate an initialised given name, please use "Adrian Charles
+Demidont" and proceed on that basis rather than hold the article for a query — though
+A.C. Demidont remains my preference, and the credential suffix DO should be retained in
+the manuscript byline either way.
 
 **Supporting information — replacement file.**
 
