@@ -29,8 +29,10 @@ OUT = REPO / "production" / "S1_Appendix.docx"
 TABLE_LETTERS = "ABCDEFG"   # Supplementary Tables 1-7
 FIG_LETTERS = "ABC"         # Supplementary Figures 1-3
 
-NOTE = ("Components of this appendix are labelled alphabetically and are cited as, for "
-        "example, “Table A in S1 Appendix” and “Fig A in S1 Appendix”.")
+# The figures are uploaded separately, so the appendix contains tables only and the note
+# must not invite a "Fig A in S1 Appendix" citation that would point at nothing.
+NOTE = ("Tables in this appendix are labelled alphabetically and are cited as, for "
+        "example, “Table A in S1 Appendix”.")
 
 
 def relabel(xml: str) -> tuple[str, list[str]]:
