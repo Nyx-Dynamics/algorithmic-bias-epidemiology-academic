@@ -1,8 +1,8 @@
 # Author Comments — paste into the Letter Body box on the Submit Task page
 
-Covers the four metadata confirmations PLOS requested, the author-name mismatch, and the
-supporting-information replacement. The data-availability paragraph has one slot to fill
-once the Zenodo version is cut — marked `<<< >>>`.
+Covers the four metadata confirmations PLOS requested, the author-name mismatch, the
+supporting-information replacement, and an amendment to the data availability statement.
+Complete as written — nothing left to fill in.
 
 ---
 
@@ -77,8 +77,7 @@ and was replaced the following day.
 
 The DOI above is the Zenodo concept DOI for the same record series. It always resolves to
 the most recent version, so the citation remains correct as the archive is updated and
-cannot again fall out of step with the manuscript. The archived version current at
-publication contains the supporting material described in S1 Appendix.
+cannot again fall out of step with the manuscript.
 
 Please let me know if anything further is required.
 
