@@ -75,6 +75,45 @@ def relabel(xml: str) -> tuple[str, list[str]]:
     return xml, log
 
 
+FIG_LABEL = re.compile(r"^(Fig [A-C])\.\s*(.+)$")
+
+
+def extract_figure_captions(xml: str) -> list[tuple[str, str]]:
+    """Pull the figure captions out before they are removed.
+
+    The figures move to Editorial Manager as separate Supporting Information items, so
+    their captions belong in the manuscript's Supporting information section, not in the
+    appendix. PLOS numbers separate items S1 Fig, S2 Fig, S3 Fig -- letters are only for
+    components inside a bundled file.
+    """
+    text = html.unescape(re.sub(r"<[^>]+>", "", re.sub(r"</w:p>", "\n", xml)))
+    out = []
+    for line in (l.strip() for l in text.split("\n")):
+        m = FIG_LABEL.match(line)
+        if m:
+            out.append((m.group(1), m.group(2).strip()))
+    return out
+
+
+def strip_figures(xml: str) -> tuple[str, int, int]:
+    """Remove figure images and their captions from the appendix body."""
+    # Drop any paragraph that contains a drawing.
+    paras = re.findall(r"<w:p\b(?:(?!<w:p\b).)*?</w:p>", xml, re.S)
+    n_img = 0
+    for para in paras:
+        if "<w:drawing>" in para:
+            xml = xml.replace(para, "", 1)
+            n_img += 1
+    # Drop the caption paragraphs.
+    n_cap = 0
+    for para in re.findall(r"<w:p\b(?:(?!<w:p\b).)*?</w:p>", xml, re.S):
+        text = html.unescape(re.sub(r"<[^>]+>", "", para)).strip()
+        if FIG_LABEL.match(text):
+            xml = xml.replace(para, "", 1)
+            n_cap += 1
+    return xml, n_img, n_cap
+
+
 def insert_note(xml: str) -> str:
     """Add the citation-guidance line immediately after the title paragraph."""
     m = re.search(r"<w:p\b[^>]*>(?:(?!</w:p>).)*?S1 Appendix.*?</w:p>", xml, re.S)
@@ -98,13 +137,45 @@ def main() -> int:
 
     xml = parts["word/document.xml"].decode("utf8")
     xml, log = relabel(xml)
+
+    captions = extract_figure_captions(xml)
+    xml, n_img, n_cap = strip_figures(xml)
+    log.append(f"figure images removed: {n_img}; figure captions removed: {n_cap}")
+    if (n_img, n_cap) != (3, 3):
+        raise SystemExit(f"expected 3 images and 3 captions, removed {n_img} and {n_cap}")
+
     xml = insert_note(xml)
     parts["word/document.xml"] = xml.encode("utf8")
+
+    # Drop the image parts and their relationships so no dangling reference remains.
+    rels = parts["word/_rels/document.xml.rels"].decode("utf8")
+    rels = re.sub(r"<Relationship\b[^>]*media/[^>]*/>", "", rels)
+    parts["word/_rels/document.xml.rels"] = rels.encode("utf8")
+    names = [n for n in names if not n.startswith("word/media/")]
+    log.append("image parts and relationships dropped")
 
     # Rewrite the package, preserving every other part byte-for-byte.
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:
         for n in names:
             z.writestr(n, parts[n])
+
+    # The figure captions now belong in the manuscript, beside the separate SI figures.
+    cap_path = OUT.parent / "SI_FIGURE_CAPTIONS.md"
+    lines = ["# Supporting information figure captions",
+             "",
+             "The three figures are uploaded to Editorial Manager as separate Supporting",
+             "Information items (`S1_Fig.tif`, `S2_Fig.tif`, `S3_Fig.tif`). PLOS numbers",
+             "separate items S1/S2/S3, not A/B/C -- letters apply only to components inside a",
+             "bundled file. These captions belong in the manuscript's Supporting information",
+             "section, one paragraph each, after the S1 Appendix entry.",
+             ""]
+    for i, (_, title) in enumerate(captions, start=1):
+        # These captions live in the manuscript now, outside the appendix, so a bare
+        # "Table G" no longer identifies its location.
+        title = re.sub(r"\bTable G\b(?! in S1 Appendix)", "Table G in S1 Appendix", title)
+        lines += [f"**S{i} Fig.** {title}", ""]
+    cap_path.write_text("\n".join(lines))
+    log.append(f"wrote {cap_path.name} with {len(captions)} caption(s)")
 
     for line in log:
         print(f"  {line}")

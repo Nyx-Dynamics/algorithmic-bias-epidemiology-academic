@@ -38,7 +38,7 @@ def items() -> list[tuple[str, str]]:
 
 def caption() -> str:
     body = "; ".join(f"{lbl}, {ttl}" for lbl, ttl in items())
-    return f"S1 Appendix. Supporting tables and figures. {body}."
+    return f"S1 Appendix. Supporting tables. {body}."
 
 
 if __name__ == "__main__":
