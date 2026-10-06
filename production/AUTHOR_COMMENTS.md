@@ -39,31 +39,27 @@ the manuscript byline either way.
 
 **Supporting information — replacement file.**
 
-I am replacing `supp-1.pdf` with `S1_Appendix.pdf`. This is a correction of a stale file
+I am replacing `supp-1.pdf` with `S1_Appendix.docx`. This is a correction of a stale file
 rather than a content change, and I want to flag it explicitly so it is not read as an
 uninvited revision.
 
 The Assignment Files inventory shows Supporting Information last modified **22 February
 2026**, while the figures were updated 5 September 2026 and the manuscript 5 October 2026.
-The supporting information was not replaced when the manuscript was revised for R1. The
-file currently on record is therefore the original February supplement: three pages, five
-tables and two figures, under the manuscript's former title.
+The supporting information was prepared for the R1 revision but was not uploaded when the
+other revised files were, so the file on record is the original February supplement: three
+pages, five tables and two figures, under the manuscript's former title.
 
-The revised manuscript describes and cites supporting material that file does not contain
-— including the parameter-derivation audit trail, the layer-interaction decomposition, the
-correlated-barrier and repeated-attempt robustness analysis, and the alternative-topology
-figure. In particular, the manuscript's single in-text citation of supporting material
-pointed to a table that does not exist in the file on record. Publishing as-is would have
-produced a citation to a non-existent table and a supplement inconsistent with the
-Results.
+The revised manuscript describes and cites supporting material that file does not contain,
+including the parameter-derivation audit trail and the robustness analysis for alternative
+topologies and repeated attempts. The in-text citation of supporting material therefore
+pointed into a file that does not hold the cited table.
 
-`S1_Appendix.pdf` is the complete R1 supplement, with components relabelled alphabetically
-per your instruction for bundled supporting information: Text A (scope of claims), Tables
-A–H, and Figs A–C. The manuscript has been updated to cite them in the required form —
-"Table H in S1 Appendix" — and the supporting information caption now lists the components
-accurately. No analysis, result, or numerical value has changed; the content is the
-supplement as prepared for the revision, relabelled and with its stale internal
-cross-references corrected.
+`S1_Appendix.docx` is the supporting information prepared for the revision, with its
+components relabelled alphabetically per your instruction for bundled supporting
+information: Tables A–G and Figs A–C. The manuscript has been updated to cite them in the
+required form — "Table G in S1 Appendix" — and the supporting information caption now
+lists the components accurately. No analysis, result, figure or numerical value has been
+altered; the relabelling changes component names only.
 
 **Data availability.** Please amend the data availability statement to read:
 

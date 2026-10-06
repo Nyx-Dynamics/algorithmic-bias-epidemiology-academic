@@ -1,5 +1,12 @@
 # Exact edits for PDIG-D-26-00342R1_FTC.docx
 
+> **Correction, 6 Oct.** Items 4 and 5 below were first issued against a supporting
+> information file rebuilt from LaTeX, in which the repeated-attempt table was Table H.
+> The authoritative R1 supplement was then located — it had been prepared for the revision
+> and never uploaded — and its table order differs. The repeated-attempt table is
+> **Table G**, and the caption list has been rewritten to the real contents. If you already
+> applied the earlier versions of items 4 and 5, see "Corrections to apply" at the end.
+
 Apply to the locked track-changes file PLOS supplied. Do not retype surrounding text —
 each item below is an exact find/replace so the tracked diff stays minimal.
 
@@ -74,7 +81,7 @@ S1 File. Supplementary Tables S1–S7 and Supplementary Figures S1–S3: individ
 **Replace with:**
 
 ```
-S1 Appendix. Supporting text, tables and figures. Text A, scope of claims; Table A, parameter-derivation audit trail for all 11 barriers; Table B, individual barrier removal effects; Table C, layer interaction decomposition; Table D, Shapley value attribution (seeded); Table E, Sobol sensitivity indices (seeded); Table F, robustness under bounded perturbation; Table G, signal-to-noise and coefficient-of-variation analysis; Table H, robustness to alternative topologies, correlated barriers and repeated attempts; Fig A, Shapley attribution; Fig B, layer-removal effects; Fig C, alternative-topology robustness.
+S1 Appendix. Supporting tables and figures. Table A, individual barrier removal effects; Table B, Shapley value attribution; Table C, Sobol sensitivity indices; Table D, bootstrap robustness summary; Table E, signal-to-noise ratio analysis; Table F, parameter derivation audit trail for all 11 barriers; Table G, robustness to alternative topologies, correlated barriers and repeated attempts; Fig A, Shapley value attribution of barrier contributions; Fig B, effect of layer removal on system success probability; Fig C, robustness to alternative topologies.
 ```
 
 Why the old text could not stand: it announced "Tables S1–S7", but S1 was a *Note* and the
@@ -96,7 +103,7 @@ are reported in Supplementary Table S7.
 **Replace with:**
 
 ```
-are reported in Table H in S1 Appendix.
+are reported in Table G in S1 Appendix.
 ```
 
 This is the only in-text citation of a supporting-information component in the manuscript.
@@ -127,3 +134,30 @@ The replacement file is `production/S1_Appendix.pdf` in the repository, generate
 - **Author name.** Manuscript reads `A.C. Demidont, DO`, which is the intended form. The
   mismatch PLOS flagged is on the Editorial Manager side; it is addressed in Author
   Comments rather than by editing the manuscript.
+
+
+---
+
+## Corrections to apply (only if you already made the earlier edits)
+
+Two strings need changing from what was issued yesterday.
+
+**Find:**
+
+```
+are reported in Table H in S1 Appendix.
+```
+
+**Replace with:**
+
+```
+are reported in Table G in S1 Appendix.
+```
+
+**Find** the supporting information paragraph beginning `S1 Appendix. Supporting text,
+tables and figures.` and **replace the whole paragraph** with the version in item 4 above,
+which begins `S1 Appendix. Supporting tables and figures.`
+
+The earlier caption listed a `Text A` component and eight tables. The real appendix has
+seven tables, three figures, and a scope-of-claims paragraph that is prose rather than a
+labelled component.
