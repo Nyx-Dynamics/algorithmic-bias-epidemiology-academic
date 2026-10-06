@@ -77,6 +77,13 @@ def relabel(xml: str) -> tuple[str, list[str]]:
 
 FIG_LABEL = re.compile(r"^(Fig [A-C])\.\s*(.+)$")
 
+# The third supporting figure is byte-identical to main Figure 6
+# (sha256 adf7157c099c9fd583a2da597a9d15b59ad8e0e30c65f064178c791a2467a2ae, confirmed
+# against the file Editorial Manager already holds). Publishing it as supporting
+# information would print the same figure twice. It is dropped, and nothing is lost: the
+# main Fig 6 caption already carries the cross-reference to Table G in S1 Appendix.
+DUPLICATE_OF_MAIN = {3: "byte-identical to main Fig 6"}
+
 
 def extract_figure_captions(xml: str) -> list[tuple[str, str]]:
     """Pull the figure captions out before they are removed.
@@ -161,19 +168,27 @@ def main() -> int:
 
     # The figure captions now belong in the manuscript, beside the separate SI figures.
     cap_path = OUT.parent / "SI_FIGURE_CAPTIONS.md"
+    n_keep = len(captions) - len(DUPLICATE_OF_MAIN)
+    files = ", ".join(f"`S{i}_Fig.tif`" for i in range(1, n_keep + 1))
     lines = ["# Supporting information figure captions",
              "",
-             "The three figures are uploaded to Editorial Manager as separate Supporting",
-             "Information items (`S1_Fig.tif`, `S2_Fig.tif`, `S3_Fig.tif`). PLOS numbers",
-             "separate items S1/S2/S3, not A/B/C -- letters apply only to components inside a",
-             "bundled file. These captions belong in the manuscript's Supporting information",
-             "section, one paragraph each, after the S1 Appendix entry.",
+             f"{n_keep} figures are uploaded to Editorial Manager as separate Supporting",
+             f"Information items ({files}). PLOS numbers separate items S1/S2/S3, not A/B/C",
+             "-- letters apply only to components inside a bundled file. These captions belong",
+             "in the manuscript's Supporting information section, one paragraph each, after",
+             "the S1 Appendix entry.",
              ""]
+    kept = 0
     for i, (_, title) in enumerate(captions, start=1):
+        if i in DUPLICATE_OF_MAIN:
+            lines += [f"> Supporting figure {i} omitted: {DUPLICATE_OF_MAIN[i]}. "
+                      f"Do not upload it.", ""]
+            continue
+        kept += 1
         # These captions live in the manuscript now, outside the appendix, so a bare
         # "Table G" no longer identifies its location.
         title = re.sub(r"\bTable G\b(?! in S1 Appendix)", "Table G in S1 Appendix", title)
-        lines += [f"**S{i} Fig.** {title}", ""]
+        lines += [f"**S{kept} Fig.** {title}", ""]
     cap_path.write_text("\n".join(lines))
     log.append(f"wrote {cap_path.name} with {len(captions)} caption(s)")
 

@@ -86,8 +86,6 @@ S1 Appendix. Supporting tables. Table A, Individual barrier removal effects; Tab
 S1 Fig. Shapley value attribution of barrier contributions. Shapley value decomposition assigning relative contribution of each barrier to overall system success while accounting for all possible barrier removal orderings. Barriers are coloured by layer: green = Data Integration, blue = Data Accuracy, red = Institutional. Values represent fair attribution of total achievable improvement, with the five highest-contributing barriers spanning all three layers, consistent with the cross-layer nature of the modeled dynamics.
 
 S2 Fig. Effect of layer removal on system success probability. Only complete removal across all three layers yields substantial improvement (100%). Single-layer removal produces negligible effects; two-layer combinations yield at most 7.4% (Data Accuracy + Institutional), consistent with the model’s three-way interaction structure.
-
-S3 Fig. Robustness to alternative topologies. Baseline success probability P (left) and three-way interaction share (right) as a function of latent Gaussian-copula correlation ρ, for the equicorrelation and within-layer block variants. The comparative conclusion (single-layer ≪ coordinated) is robust to correlation while the baseline value is correlation-sensitive. The repeated-attempt results (m = 2, 3), which attenuate interaction dominance, are reported in Table G in S1 Appendix.
 ```
 
 Why the old text could not stand: it announced "Tables S1–S7", but S1 was a *Note* and the
@@ -128,7 +126,11 @@ now that table.
 | Replace | `supp-1.pdf` → `S1_Appendix.docx` | `S1 Appendix` |
 | Add | `S1_Fig.tif` | `S1 Fig` |
 | Add | `S2_Fig.tif` | `S2 Fig` |
-| Add | `S3_Fig.tif` | `S3 Fig` |
+
+`S3_Fig.tif` is **not** uploaded: it is byte-identical to main `Fig6.tif`
+(sha256 `adf7157c…`, the same file Editorial Manager already holds), so uploading it would
+publish the same figure twice. Nothing is lost — the main Fig 6 caption already carries the
+cross-reference to Table G in S1 Appendix.
 
 The three figure TIFFs are in `~/Downloads/PDIG-D-26-00342/v6_upload/figures/`. They are no
 longer embedded in the appendix, so uploading them does not duplicate anything.
