@@ -81,11 +81,7 @@ S1 File. Supplementary Tables S1–S7 and Supplementary Figures S1–S3: individ
 **Replace with:**
 
 ```
-S1 Appendix. Supporting tables. Table A, Individual barrier removal effects; Table B, Shapley value attribution; Table C, Sobol sensitivity indices; Table D, Bootstrap robustness summary; Table E, Signal-to-noise ratio analysis; Table F, Parameter derivation audit trail (all 11 barriers); Table G, Robustness to alternative topologies: correlated barriers and repeated attempts (seed 42, n = 100,000).
-
-S1 Fig. Shapley value attribution of barrier contributions. Shapley value decomposition assigning relative contribution of each barrier to overall system success while accounting for all possible barrier removal orderings. Barriers are coloured by layer: green = Data Integration, blue = Data Accuracy, red = Institutional. Values represent fair attribution of total achievable improvement, with the five highest-contributing barriers spanning all three layers, consistent with the cross-layer nature of the modeled dynamics.
-
-S2 Fig. Effect of layer removal on system success probability. Only complete removal across all three layers yields substantial improvement (100%). Single-layer removal produces negligible effects; two-layer combinations yield at most 7.4% (Data Accuracy + Institutional), consistent with the model’s three-way interaction structure.
+S1 Appendix. Supporting tables and figures. Table A, Individual barrier removal effects; Table B, Shapley value attribution; Table C, Sobol sensitivity indices; Table D, Bootstrap robustness summary; Table E, Signal-to-noise ratio analysis; Table F, Parameter derivation audit trail (all 11 barriers); Table G, Robustness to alternative topologies: correlated barriers and repeated attempts (seed 42, n = 100,000); Fig A, Shapley value attribution of barrier contributions; Fig B, Effect of layer removal on system success probability.
 ```
 
 Why the old text could not stand: it announced "Tables S1–S7", but S1 was a *Note* and the
@@ -124,11 +120,13 @@ now that table.
 | action | file | Item / Description |
 |---|---|---|
 | Replace | `supp-1.pdf` → `S1_Appendix.docx` | `S1 Appendix` |
-| Add | `S1_Fig.tif` | `S1 Fig` |
-| Add | `S2_Fig.tif` | `S2 Fig` |
 
-`S3_Fig.tif` is **not** uploaded: it is byte-identical to main `Fig6.tif`
-(sha256 `adf7157c…`, the same file Editorial Manager already holds), so uploading it would
+**One upload, not four.** The two supporting figures are embedded in the appendix as Fig A
+and Fig B, so no separate figure files are needed. If `S1 Fig`, `S2 Fig` or `S3 Fig` items
+were already added in Editorial Manager, remove them.
+
+`S3_Fig.tif` is excluded entirely: it is byte-identical to main `Fig6.tif`
+(sha256 `adf7157c…`, the same file Editorial Manager already holds), so including it would
 publish the same figure twice. Nothing is lost — the main Fig 6 caption already carries the
 cross-reference to Table G in S1 Appendix.
 

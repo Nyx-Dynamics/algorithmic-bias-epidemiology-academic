@@ -37,8 +37,13 @@ def items() -> list[tuple[str, str]]:
 
 
 def caption() -> str:
-    body = "; ".join(f"{lbl}, {ttl}" for lbl, ttl in items())
-    return f"S1 Appendix. Supporting tables. {body}."
+    found = items()
+    body = "; ".join(f"{lbl}, {ttl}" for lbl, ttl in found)
+    # The heading follows the contents: it has been wrong in both directions already,
+    # once promising figures the appendix did not hold and once omitting figures it did.
+    has_figs = any(lbl.startswith("Fig") for lbl, _ in found)
+    kind = "tables and figures" if has_figs else "tables"
+    return f"S1 Appendix. Supporting {kind}. {body}."
 
 
 if __name__ == "__main__":

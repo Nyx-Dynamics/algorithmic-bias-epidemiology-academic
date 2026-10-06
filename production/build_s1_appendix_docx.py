@@ -29,10 +29,8 @@ OUT = REPO / "production" / "S1_Appendix.docx"
 TABLE_LETTERS = "ABCDEFG"   # Supplementary Tables 1-7
 FIG_LETTERS = "ABC"         # Supplementary Figures 1-3
 
-# The figures are uploaded separately, so the appendix contains tables only and the note
-# must not invite a "Fig A in S1 Appendix" citation that would point at nothing.
-NOTE = ("Tables in this appendix are labelled alphabetically and are cited as, for "
-        "example, “Table A in S1 Appendix”.")
+NOTE = ("Components of this appendix are labelled alphabetically and are cited as, for "
+        "example, “Table A in S1 Appendix” and “Fig A in S1 Appendix”.")
 
 
 def relabel(xml: str) -> tuple[str, list[str]]:
@@ -84,7 +82,7 @@ FIG_LABEL = re.compile(r"^(Fig [A-C])\.\s*(.+)$")
 # against the file Editorial Manager already holds). Publishing it as supporting
 # information would print the same figure twice. It is dropped, and nothing is lost: the
 # main Fig 6 caption already carries the cross-reference to Table G in S1 Appendix.
-DUPLICATE_OF_MAIN = {3: "byte-identical to main Fig 6"}
+DUPLICATE_OF_MAIN_LABEL = "Fig C"
 
 
 def extract_figure_captions(xml: str) -> list[tuple[str, str]]:
@@ -104,23 +102,39 @@ def extract_figure_captions(xml: str) -> list[tuple[str, str]]:
     return out
 
 
-def strip_figures(xml: str) -> tuple[str, int, int]:
-    """Remove figure images and their captions from the appendix body."""
-    # Drop any paragraph that contains a drawing.
+def drop_duplicate_figure(xml: str) -> tuple[str, int, int]:
+    """Remove only the figure that duplicates a main manuscript figure.
+
+    Figs A and B stay embedded so the appendix remains a single self-contained
+    Supporting Information file. Fig C is dropped because it is byte-identical to main
+    Figure 6 (sha256 adf7157c…, the same file Editorial Manager already holds), so
+    publishing it here would print the same figure twice. Nothing is lost: the main Fig 6
+    caption already cross-references Table G in S1 Appendix.
+    """
     paras = re.findall(r"<w:p\b(?:(?!<w:p\b).)*?</w:p>", xml, re.S)
-    n_img = 0
-    for para in paras:
-        if "<w:drawing>" in para:
-            xml = xml.replace(para, "", 1)
-            n_img += 1
-    # Drop the caption paragraphs.
-    n_cap = 0
-    for para in re.findall(r"<w:p\b(?:(?!<w:p\b).)*?</w:p>", xml, re.S):
+
+    # The caption identifies the figure; the image sits in the nearest preceding
+    # drawing paragraph, so locate the caption first and work backwards.
+    cap_idx = None
+    for i, para in enumerate(paras):
         text = html.unescape(re.sub(r"<[^>]+>", "", para)).strip()
-        if FIG_LABEL.match(text):
-            xml = xml.replace(para, "", 1)
-            n_cap += 1
-    return xml, n_img, n_cap
+        if text.startswith(DUPLICATE_OF_MAIN_LABEL + "."):
+            cap_idx = i
+            break
+    if cap_idx is None:
+        raise SystemExit(f"caption for {DUPLICATE_OF_MAIN_LABEL} not found")
+
+    img_idx = None
+    for i in range(cap_idx - 1, -1, -1):
+        if "<w:drawing>" in paras[i]:
+            img_idx = i
+            break
+    if img_idx is None:
+        raise SystemExit(f"image paragraph for {DUPLICATE_OF_MAIN_LABEL} not found")
+
+    for i in (cap_idx, img_idx):
+        xml = xml.replace(paras[i], "", 1)
+    return xml, 1, 1
 
 
 def insert_note(xml: str) -> str:
@@ -147,52 +161,31 @@ def main() -> int:
     xml = parts["word/document.xml"].decode("utf8")
     xml, log = relabel(xml)
 
-    captions = extract_figure_captions(xml)
-    xml, n_img, n_cap = strip_figures(xml)
-    log.append(f"figure images removed: {n_img}; figure captions removed: {n_cap}")
-    if (n_img, n_cap) != (3, 3):
-        raise SystemExit(f"expected 3 images and 3 captions, removed {n_img} and {n_cap}")
+    xml, n_img, n_cap = drop_duplicate_figure(xml)
+    log.append(f"duplicate figure dropped ({DUPLICATE_OF_MAIN_LABEL}): "
+               f"{n_img} image, {n_cap} caption")
 
     xml = insert_note(xml)
     parts["word/document.xml"] = xml.encode("utf8")
 
-    # Drop the image parts and their relationships so no dangling reference remains.
+    # Drop only the media parts the document no longer references.
+    used = set(re.findall(r'r:embed="([^"]+)"', xml))
     rels = parts["word/_rels/document.xml.rels"].decode("utf8")
-    rels = re.sub(r"<Relationship\b[^>]*media/[^>]*/>", "", rels)
+    orphan_targets = []
+    for m in re.finditer(r'<Relationship\b[^>]*?Id="([^"]+)"[^>]*?Target="([^"]+)"[^>]*?/>',
+                         rels):
+        rid, target = m.group(1), m.group(2)
+        if "media/" in target and rid not in used:
+            orphan_targets.append("word/" + target.lstrip("/"))
+            rels = rels.replace(m.group(0), "")
     parts["word/_rels/document.xml.rels"] = rels.encode("utf8")
-    names = [n for n in names if not n.startswith("word/media/")]
-    log.append("image parts and relationships dropped")
+    names = [n for n in names if n not in orphan_targets]
+    log.append(f"orphaned media parts dropped: {len(orphan_targets)}")
 
     # Rewrite the package, preserving every other part byte-for-byte.
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:
         for n in names:
             z.writestr(n, parts[n])
-
-    # The figure captions now belong in the manuscript, beside the separate SI figures.
-    cap_path = OUT.parent / "SI_FIGURE_CAPTIONS.md"
-    n_keep = len(captions) - len(DUPLICATE_OF_MAIN)
-    files = ", ".join(f"`S{i}_Fig.tif`" for i in range(1, n_keep + 1))
-    lines = ["# Supporting information figure captions",
-             "",
-             f"{n_keep} figures are uploaded to Editorial Manager as separate Supporting",
-             f"Information items ({files}). PLOS numbers separate items S1/S2/S3, not A/B/C",
-             "-- letters apply only to components inside a bundled file. These captions belong",
-             "in the manuscript's Supporting information section, one paragraph each, after",
-             "the S1 Appendix entry.",
-             ""]
-    kept = 0
-    for i, (_, title) in enumerate(captions, start=1):
-        if i in DUPLICATE_OF_MAIN:
-            lines += [f"> Supporting figure {i} omitted: {DUPLICATE_OF_MAIN[i]}. "
-                      f"Do not upload it.", ""]
-            continue
-        kept += 1
-        # These captions live in the manuscript now, outside the appendix, so a bare
-        # "Table G" no longer identifies its location.
-        title = re.sub(r"\bTable G\b(?! in S1 Appendix)", "Table G in S1 Appendix", title)
-        lines += [f"**S{kept} Fig.** {title}", ""]
-    cap_path.write_text("\n".join(lines))
-    log.append(f"wrote {cap_path.name} with {len(captions)} caption(s)")
 
     for line in log:
         print(f"  {line}")
