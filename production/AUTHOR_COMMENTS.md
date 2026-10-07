@@ -56,10 +56,20 @@ pointed into a file that does not hold the cited table.
 
 `S1_Appendix.docx` is the supporting information prepared for the revision, with its
 components relabelled alphabetically per your instruction for bundled supporting
-information: Tables A–G and Figs A–C. The manuscript has been updated to cite them in the
-required form — "Table G in S1 Appendix" — and the supporting information caption now
-lists the components accurately. No analysis, result, figure or numerical value has been
-altered; the relabelling changes component names only.
+information: Tables A–G and Figs A and B. The manuscript has been updated to cite them in
+the required form — "Table G in S1 Appendix" — and the supporting information caption now
+lists the components accurately.
+
+One omission to note. The supplement as drafted contained a third supporting figure that is
+the same image as main Figure 6, and the figure file already on record with you as Fig6.tif
+is byte-identical to it. Including it would have published the same figure twice, so it has
+been left out and the supporting information caption lists Fig A and Fig B only. Nothing is
+lost by this: the main Figure 6 caption already carries the cross-reference to Table G in
+S1 Appendix.
+
+Apart from that omission, no analysis, result, figure or numerical value has been altered;
+the relabelling changes component names only. The appendix is a single self-contained file,
+so no separate supporting figure files are needed.
 
 **Data availability.** Please amend the data availability statement to read:
 
